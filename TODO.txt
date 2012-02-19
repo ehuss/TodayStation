@@ -1,0 +1,23 @@
+- Display busy indicator while downloading.
+- clock 12/24 hour
+- wunderground: maybe display "observation_location"?
+- Is there any way to detect celsius/fahrenheit from locale?
+- Calender date header: Right align the date portion, day portion is left-aligned.
+- Calender entries: left align time, right align title?
+  - Or maybe just offset title to a consistent location (enough space for time).
+- Initial display is sneaking in surrogates from storyboard... (At least clock)
+- call pause code when leaving foreground
+- On return from background, update weather and calendar.
+- EKEventStoreChangedNotification does not have coalesce. :(
+  Need to implement some kind of anti-jitter.
+  Maybe: After receiving message...wait for a certain period of time, ignoring
+  messages, and then fire.
+
+MAJOR:
+- Auto find location.
+- Icons
+- What to do with space around hourly information.
+- Weather updating hourly (check).
+  - Clear out old views.
+- Error handling.
+

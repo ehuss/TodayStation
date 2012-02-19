@@ -7,6 +7,7 @@
 //
 
 #import "TodayStationTests.h"
+#import "TSCache.h"
 
 @implementation TodayStationTests
 
@@ -26,7 +27,8 @@
 
 - (void)testExample
 {
-    STFail(@"Unit tests are not implemented yet in TodayStationTests");
+    [TSCache sharedCache];
+    //STFail(@"Unit tests are not implemented yet in TodayStationTests");
 }
 
 @end

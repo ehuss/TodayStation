@@ -7,6 +7,7 @@
 //
 
 #import "TSAppDelegate.h"
+#import "TSUtil.h"
 
 @implementation TSAppDelegate
 
@@ -15,6 +16,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    guess24hour();
+    
+    
     return YES;
 }
 							
@@ -39,6 +43,8 @@
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
+    // In case the user changed settings.
+    guess24hour();
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
