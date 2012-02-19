@@ -12,12 +12,11 @@
   Need to implement some kind of anti-jitter.
   Maybe: After receiving message...wait for a certain period of time, ignoring
   messages, and then fire.
+- Does idle timer remain disabled after sleep/wake?
 
 MAJOR:
 - Auto find location.
 - Icons
 - What to do with space around hourly information.
-- Weather updating hourly (check).
-  - Clear out old views.
 - Error handling.
 

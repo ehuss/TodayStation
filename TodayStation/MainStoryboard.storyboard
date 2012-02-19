@@ -148,7 +148,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="etU-qP-eB9" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="Wunderbug Controller" id="7zu-4S-Ote" userLabel="Wunderground Controller" customClass="TSWundergroundController" sceneMemberID="viewController">
-                    <view key="view" opaque="NO" autoresizesSubviews="NO" alpha="0.0" contentMode="scaleToFill" id="aR0-np-dai" userLabel="Top-level View">
+                    <view key="view" autoresizesSubviews="NO" opaque="NO" alpha="0.0" contentMode="scaleToFill" id="aR0-np-dai" userLabel="Top-level View">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>

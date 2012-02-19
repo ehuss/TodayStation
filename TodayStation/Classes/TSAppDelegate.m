@@ -17,7 +17,7 @@
 {
     // Override point for customization after application launch.
     guess24hour();
-    
+    [application setIdleTimerDisabled:YES];
     
     return YES;
 }

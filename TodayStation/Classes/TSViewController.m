@@ -1,5 +1,5 @@
 //
-//  TSController.m
+//  TSViewController.m
 //  TodayStation
 //
 //  Created by Eric Huss on 2/11/12.
@@ -20,6 +20,8 @@
 @synthesize secondsTimer=_secondsTimer;
 @synthesize weatherService=_weatherService;
 @synthesize calendar=_calendar;
+@synthesize tallView=_tallView;
+@synthesize foreView=_foreView;
 
 - (void)didReceiveMemoryWarning
 {
@@ -110,21 +112,17 @@
 - (void)weatherUpdated:(NSNotification *)notification
 {
     NSLog(@"Weather updated.");
-    UIView *currentView = [self.weatherService buildCurrentView];
-    UIView *foreView = [self.weatherService buildForeView];
-    UIView *tallView = [self.weatherService buildTallView];
-    // XXXXXXX HANDLE REPLACEMENT.
-    /*    for (UIView *view in self.currentView.subviews) {
-     [view removeFromSuperview];
-     }*/
-    [self.view addSubview:currentView];
-//    [self.view addSubview:tallView];
-    [self.view addSubview:foreView];
-    [self.view addSubview:tallView];
+    [self.currentView removeFromSuperview];
+    [self.foreView removeFromSuperview];
+    [self.tallView removeFromSuperview];
     
-    
-    
-    
+    self.currentView = [self.weatherService buildCurrentView];
+    self.foreView = [self.weatherService buildForeView];
+    self.tallView = [self.weatherService buildTallView];
+
+    [self.view addSubview:self.currentView];
+    [self.view addSubview:self.foreView];
+    [self.view addSubview:self.tallView];
 }
 
 /*
