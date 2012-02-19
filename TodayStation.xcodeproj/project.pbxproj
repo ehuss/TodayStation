@@ -91,12 +91,12 @@
 		0752581F14F04B6E00881380 /* TSCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCalendar.m; sourceTree = "<group>"; };
 		0752582114F05DE400881380 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		0752582314F0774B00881380 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		0752582514F079DB00881380 /* TSLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSLabel.h; sourceTree = "<group>"; };
-		0752582614F079DB00881380 /* TSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSLabel.m; sourceTree = "<group>"; };
-		0752582814F08A4600881380 /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
-		0752582914F08A4700881380 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
-		0752582B14F08B2D00881380 /* TSBackgroundService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSBackgroundService.h; sourceTree = "<group>"; };
-		0752582C14F08B2D00881380 /* TSBackgroundService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSBackgroundService.m; sourceTree = "<group>"; };
+		0752582514F079DB00881380 /* TSLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSLabel.h; path = TodayStation/Classes/Util/TSLabel.h; sourceTree = "<group>"; };
+		0752582614F079DB00881380 /* TSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSLabel.m; path = TodayStation/Classes/Util/TSLabel.m; sourceTree = "<group>"; };
+		0752582814F08A4600881380 /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+MainThread.h"; path = "TodayStation/Classes/Util/NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
+		0752582914F08A4700881380 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+MainThread.m"; path = "TodayStation/Classes/Util/NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
+		0752582B14F08B2D00881380 /* TSBackgroundService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSBackgroundService.h; path = TodayStation/Classes/Util/TSBackgroundService.h; sourceTree = "<group>"; };
+		0752582C14F08B2D00881380 /* TSBackgroundService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSBackgroundService.m; path = TodayStation/Classes/Util/TSBackgroundService.m; sourceTree = "<group>"; };
 		0764CB3514EE287100559289 /* TodayStation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodayStation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0764CB3914EE287100559289 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		0764CB3B14EE287100559289 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -116,31 +116,31 @@
 		0764CB6314EE287100559289 /* TodayStationTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayStationTests.h; sourceTree = "<group>"; };
 		0764CB6414EE287100559289 /* TodayStationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayStationTests.m; sourceTree = "<group>"; };
 		0764CB7114EE28CF00559289 /* SBJson.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SBJson.xcodeproj; path = SBJson_3.1alpha3/SBJson.xcodeproj; sourceTree = "<group>"; };
-		0764CB8614EE299000559289 /* TSCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCache.h; sourceTree = "<group>"; };
-		0764CB8714EE299000559289 /* TSCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCache.m; sourceTree = "<group>"; };
-		0764CB8914EE2A3E00559289 /* TSWeatherController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSWeatherController.h; sourceTree = "<group>"; };
-		0764CB8A14EE2A3E00559289 /* TSWeatherController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWeatherController.m; sourceTree = "<group>"; };
-		0764CB8C14EE2A8200559289 /* TSWeatherIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSWeatherIcons.h; sourceTree = "<group>"; };
-		0764CB8D14EE2A8200559289 /* TSWeatherIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWeatherIcons.m; sourceTree = "<group>"; };
-		0764CB8F14EE2AB400559289 /* TSWeatherService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSWeatherService.h; sourceTree = "<group>"; };
-		0764CB9014EE2AB400559289 /* TSWeatherService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWeatherService.m; sourceTree = "<group>"; };
-		0764CB9214EE2AFC00559289 /* TSWunderground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSWunderground.h; sourceTree = "<group>"; };
-		0764CB9314EE2AFC00559289 /* TSWunderground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWunderground.m; sourceTree = "<group>"; };
-		0764CB9514EE2B3800559289 /* TSWundergroundController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSWundergroundController.h; sourceTree = "<group>"; };
-		0764CB9614EE2B3800559289 /* TSWundergroundController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWundergroundController.m; sourceTree = "<group>"; };
+		0764CB8614EE299000559289 /* TSCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSCache.h; path = TodayStation/Classes/Util/TSCache.h; sourceTree = "<group>"; };
+		0764CB8714EE299000559289 /* TSCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSCache.m; path = TodayStation/Classes/Util/TSCache.m; sourceTree = "<group>"; };
+		0764CB8914EE2A3E00559289 /* TSWeatherController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWeatherController.h; path = TodayStation/Classes/Weather/TSWeatherController.h; sourceTree = "<group>"; };
+		0764CB8A14EE2A3E00559289 /* TSWeatherController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWeatherController.m; path = TodayStation/Classes/Weather/TSWeatherController.m; sourceTree = "<group>"; };
+		0764CB8C14EE2A8200559289 /* TSWeatherIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWeatherIcons.h; path = TodayStation/Classes/Weather/TSWeatherIcons.h; sourceTree = "<group>"; };
+		0764CB8D14EE2A8200559289 /* TSWeatherIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWeatherIcons.m; path = TodayStation/Classes/Weather/TSWeatherIcons.m; sourceTree = "<group>"; };
+		0764CB8F14EE2AB400559289 /* TSWeatherService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWeatherService.h; path = TodayStation/Classes/Weather/TSWeatherService.h; sourceTree = "<group>"; };
+		0764CB9014EE2AB400559289 /* TSWeatherService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWeatherService.m; path = TodayStation/Classes/Weather/TSWeatherService.m; sourceTree = "<group>"; };
+		0764CB9214EE2AFC00559289 /* TSWunderground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWunderground.h; path = TodayStation/Classes/Weather/Wunderground/TSWunderground.h; sourceTree = "<group>"; };
+		0764CB9314EE2AFC00559289 /* TSWunderground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWunderground.m; path = TodayStation/Classes/Weather/Wunderground/TSWunderground.m; sourceTree = "<group>"; };
+		0764CB9514EE2B3800559289 /* TSWundergroundController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWundergroundController.h; path = TodayStation/Classes/Weather/Wunderground/TSWundergroundController.h; sourceTree = "<group>"; };
+		0764CB9614EE2B3800559289 /* TSWundergroundController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWundergroundController.m; path = TodayStation/Classes/Weather/Wunderground/TSWundergroundController.m; sourceTree = "<group>"; };
 		0764CB9814EE2BE900559289 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		0764CB9D14EE2E4200559289 /* TSCacheTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCacheTests.h; sourceTree = "<group>"; };
 		0764CB9E14EE2E4200559289 /* TSCacheTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCacheTests.m; sourceTree = "<group>"; };
-		0764CBA314EE47A700559289 /* NSDictionary+TSUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+TSUtil.h"; sourceTree = "<group>"; };
-		0764CBA414EE47A700559289 /* NSDictionary+TSUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+TSUtil.m"; sourceTree = "<group>"; };
-		0764CBA714EF241D00559289 /* TSUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSUtil.h; sourceTree = "<group>"; };
-		0764CBA814EF241D00559289 /* TSUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSUtil.m; sourceTree = "<group>"; };
+		0764CBA314EE47A700559289 /* NSDictionary+TSUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+TSUtil.h"; path = "TodayStation/Classes/Util/NSDictionary+TSUtil.h"; sourceTree = "<group>"; };
+		0764CBA414EE47A700559289 /* NSDictionary+TSUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+TSUtil.m"; path = "TodayStation/Classes/Util/NSDictionary+TSUtil.m"; sourceTree = "<group>"; };
+		0764CBA714EF241D00559289 /* TSUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSUtil.h; path = TodayStation/Classes/Util/TSUtil.h; sourceTree = "<group>"; };
+		0764CBA814EF241D00559289 /* TSUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUtil.m; path = TodayStation/Classes/Util/TSUtil.m; sourceTree = "<group>"; };
 		0764CBAA14EF2E3200559289 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0764CBF414EF56B700559289 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
-		0764CBFD14EF635500559289 /* TSWundergroundForeCont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSWundergroundForeCont.h; sourceTree = "<group>"; };
-		0764CBFE14EF635500559289 /* TSWundergroundForeCont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWundergroundForeCont.m; sourceTree = "<group>"; };
-		0764CC0014EF792300559289 /* TSWundergroundHourlyCont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSWundergroundHourlyCont.h; sourceTree = "<group>"; };
-		0764CC0114EF792300559289 /* TSWundergroundHourlyCont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWundergroundHourlyCont.m; sourceTree = "<group>"; };
+		0764CBFD14EF635500559289 /* TSWundergroundForeCont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWundergroundForeCont.h; path = TodayStation/Classes/Weather/Wunderground/TSWundergroundForeCont.h; sourceTree = "<group>"; };
+		0764CBFE14EF635500559289 /* TSWundergroundForeCont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWundergroundForeCont.m; path = TodayStation/Classes/Weather/Wunderground/TSWundergroundForeCont.m; sourceTree = "<group>"; };
+		0764CC0014EF792300559289 /* TSWundergroundHourlyCont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWundergroundHourlyCont.h; path = TodayStation/Classes/Weather/Wunderground/TSWundergroundHourlyCont.h; sourceTree = "<group>"; };
+		0764CC0114EF792300559289 /* TSWundergroundHourlyCont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWundergroundHourlyCont.m; path = TodayStation/Classes/Weather/Wunderground/TSWundergroundHourlyCont.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +170,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0752582E14F09C5800881380 /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				0764CB8914EE2A3E00559289 /* TSWeatherController.h */,
+				0764CB8A14EE2A3E00559289 /* TSWeatherController.m */,
+				0764CB8C14EE2A8200559289 /* TSWeatherIcons.h */,
+				0764CB8D14EE2A8200559289 /* TSWeatherIcons.m */,
+				0764CB8F14EE2AB400559289 /* TSWeatherService.h */,
+				0764CB9014EE2AB400559289 /* TSWeatherService.m */,
+				0752582F14F09E5000881380 /* Wunderground */,
+			);
+			name = Weather;
+			path = ../Weather;
+			sourceTree = "<group>";
+		};
+		0752582F14F09E5000881380 /* Wunderground */ = {
+			isa = PBXGroup;
+			children = (
+				0764CB9214EE2AFC00559289 /* TSWunderground.h */,
+				0764CB9314EE2AFC00559289 /* TSWunderground.m */,
+				0764CB9514EE2B3800559289 /* TSWundergroundController.h */,
+				0764CB9614EE2B3800559289 /* TSWundergroundController.m */,
+				0764CBFD14EF635500559289 /* TSWundergroundForeCont.h */,
+				0764CBFE14EF635500559289 /* TSWundergroundForeCont.m */,
+				0764CC0014EF792300559289 /* TSWundergroundHourlyCont.h */,
+				0764CC0114EF792300559289 /* TSWundergroundHourlyCont.m */,
+			);
+			path = Wunderground;
+			sourceTree = "<group>";
+		};
 		0764CB2A14EE287000559289 = {
 			isa = PBXGroup;
 			children = (
@@ -207,41 +237,10 @@
 		0764CB3F14EE287100559289 /* TodayStation */ = {
 			isa = PBXGroup;
 			children = (
+				07E4C1C714F0A2DD009A6AC1 /* Classes */,
 				0764CB9814EE2BE900559289 /* MainStoryboard.storyboard */,
-				0764CBA314EE47A700559289 /* NSDictionary+TSUtil.h */,
-				0764CBA414EE47A700559289 /* NSDictionary+TSUtil.m */,
-				0752582814F08A4600881380 /* NSNotificationCenter+MainThread.h */,
-				0752582914F08A4700881380 /* NSNotificationCenter+MainThread.m */,
 				0764CBAA14EF2E3200559289 /* Settings.bundle */,
 				0764CB4014EE287100559289 /* Supporting Files */,
-				0764CB4814EE287100559289 /* TSAppDelegate.h */,
-				0764CB4914EE287100559289 /* TSAppDelegate.m */,
-				0764CB8614EE299000559289 /* TSCache.h */,
-				0764CB8714EE299000559289 /* TSCache.m */,
-				0752581E14F04B6E00881380 /* TSCalendar.h */,
-				0752581F14F04B6E00881380 /* TSCalendar.m */,
-				0752582514F079DB00881380 /* TSLabel.h */,
-				0752582614F079DB00881380 /* TSLabel.m */,
-				0764CBA714EF241D00559289 /* TSUtil.h */,
-				0764CBA814EF241D00559289 /* TSUtil.m */,
-				0764CB4E14EE287100559289 /* TSViewController.h */,
-				0764CB4F14EE287100559289 /* TSViewController.m */,
-				0764CB8914EE2A3E00559289 /* TSWeatherController.h */,
-				0764CB8A14EE2A3E00559289 /* TSWeatherController.m */,
-				0764CB8C14EE2A8200559289 /* TSWeatherIcons.h */,
-				0764CB8D14EE2A8200559289 /* TSWeatherIcons.m */,
-				0764CB8F14EE2AB400559289 /* TSWeatherService.h */,
-				0764CB9014EE2AB400559289 /* TSWeatherService.m */,
-				0752582B14F08B2D00881380 /* TSBackgroundService.h */,
-				0752582C14F08B2D00881380 /* TSBackgroundService.m */,
-				0764CB9214EE2AFC00559289 /* TSWunderground.h */,
-				0764CB9314EE2AFC00559289 /* TSWunderground.m */,
-				0764CB9514EE2B3800559289 /* TSWundergroundController.h */,
-				0764CB9614EE2B3800559289 /* TSWundergroundController.m */,
-				0764CBFD14EF635500559289 /* TSWundergroundForeCont.h */,
-				0764CBFE14EF635500559289 /* TSWundergroundForeCont.m */,
-				0764CC0014EF792300559289 /* TSWundergroundHourlyCont.h */,
-				0764CC0114EF792300559289 /* TSWundergroundHourlyCont.m */,
 			);
 			path = TodayStation;
 			sourceTree = "<group>";
@@ -287,6 +286,41 @@
 				0764CB8214EE28CF00559289 /* sbjson-iosTests.octest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		07E4C1C614F0A1FD009A6AC1 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				0764CBA314EE47A700559289 /* NSDictionary+TSUtil.h */,
+				0764CBA414EE47A700559289 /* NSDictionary+TSUtil.m */,
+				0752582814F08A4600881380 /* NSNotificationCenter+MainThread.h */,
+				0752582914F08A4700881380 /* NSNotificationCenter+MainThread.m */,
+				0752582B14F08B2D00881380 /* TSBackgroundService.h */,
+				0752582C14F08B2D00881380 /* TSBackgroundService.m */,
+				0764CB8614EE299000559289 /* TSCache.h */,
+				0764CB8714EE299000559289 /* TSCache.m */,
+				0752582514F079DB00881380 /* TSLabel.h */,
+				0752582614F079DB00881380 /* TSLabel.m */,
+				0764CBA714EF241D00559289 /* TSUtil.h */,
+				0764CBA814EF241D00559289 /* TSUtil.m */,
+			);
+			name = Util;
+			path = ../Util;
+			sourceTree = "<group>";
+		};
+		07E4C1C714F0A2DD009A6AC1 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				0764CB4814EE287100559289 /* TSAppDelegate.h */,
+				0764CB4914EE287100559289 /* TSAppDelegate.m */,
+				0752581E14F04B6E00881380 /* TSCalendar.h */,
+				0752581F14F04B6E00881380 /* TSCalendar.m */,
+				0764CB4E14EE287100559289 /* TSViewController.h */,
+				0764CB4F14EE287100559289 /* TSViewController.m */,
+				07E4C1C614F0A1FD009A6AC1 /* Util */,
+				0752582E14F09C5800881380 /* Weather */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
