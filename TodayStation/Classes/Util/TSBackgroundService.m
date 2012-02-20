@@ -7,19 +7,18 @@
 //
 
 #import "TSBackgroundService.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation TSBackgroundService
 @synthesize updateTimer = _updateTimer;
 @synthesize currentOperation = _currentOperation;
 @synthesize lastUpdate = _lastUpdate;
 @synthesize status = _status;
-@synthesize notificationName = _notificationName;
+@synthesize updateInterval = _updateInterval;
 
 - (id)init
 {
     if (self = [super init]) {
-        updateInterval = 3600;
+        _updateInterval = 3600;
         _status = kTSStatusUnknown;
         return self;
     }
@@ -28,14 +27,14 @@
 
 - (void)createTimer
 {
-    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:updateInterval target:self selector:@selector(updateTimerFired:) userInfo:nil repeats:YES];                
+    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:_updateInterval target:self selector:@selector(updateTimerFired:) userInfo:nil repeats:YES];                
 }
 
 - (void)start
 {
     if (self.updateTimer == nil) {
         if (self.lastUpdate == nil ||
-            [self.lastUpdate timeIntervalSinceNow] > updateInterval) {
+            [self.lastUpdate timeIntervalSinceNow] > _updateInterval) {
             [self spawnUpdate];
         }
         [self createTimer];
@@ -44,9 +43,13 @@
 
 - (void)pause
 {
-    [self.updateTimer invalidate];
-    self.updateTimer = nil;
-    // XXX Halt operation.
+    if (self.updateTimer != nil) {
+        [self.updateTimer invalidate];
+        self.updateTimer = nil;
+    }
+    if (self.currentOperation != nil) {
+        [self.currentOperation cancel];
+    }
 }
 
 - (void)spawnTaskNow
@@ -79,14 +82,8 @@
 {
     self.status = kTSStatusRunning;
     [self doTask];
-    NSNotification *notification = [NSNotification 
-                                    notificationWithName:self.notificationName 
-                                    object:self];
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    // Note: No support for coalescing using this technique.
-    // Not sure how to get the NSNotificationQueue for the main thread.
-    // (defaultQueue is per thread).
-    [center postNotificationOnMainThread:notification];
+    self.status = kTSStatusDone;
+    self.lastUpdate = [NSDate date];
 }
 
 - (void)updateTimerFired:(NSTimer *)timer
@@ -97,13 +94,6 @@
 - (void)doTask
 {
     // Must override.
-    self.status = kTSStatusFailure;
 }
-
-- (void)mainThreadNotification:(NSNotification *)notification
-{
-    // Does nothing.
-}
-
 
 @end

@@ -8,19 +8,9 @@
 
 #import "TSWeatherService.h"
 
-NSString *TSWeatherReadyNotification = @"TSWeatherReadyNotification";
-
 @implementation TSWeatherService
-
-- (id)init
-{
-    if (self = [super init]) {
-        self.notificationName = TSWeatherReadyNotification;
-        return self;
-    }
-    return nil;
-}
-
+@synthesize delegate =_delegate;
+@synthesize geoDelegate=_geoDelegate;
 
 - (UIView *)buildForeView
 {
@@ -35,6 +25,24 @@ NSString *TSWeatherReadyNotification = @"TSWeatherReadyNotification";
 - (UIView *)buildCurrentView
 {
     return nil;
+}
+
+- (void)geoLookupWrapper:(CLLocation *)location
+{
+    [self bgGeoLookup:location];
+    [self.geoDelegate performSelectorOnMainThread:@selector(geoReady) withObject:nil waitUntilDone:NO];
+}
+
+- (void)doGeoLookup:(CLLocation *)location
+{
+    NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(geoLookupWrapper:) object:location];
+    [[NSOperationQueue currentQueue] addOperation:op];    
+}
+
+
+- (void)bgGeoLookup:(CLLocation *)location
+{
+    return;
 }
 
 @end

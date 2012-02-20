@@ -7,7 +7,6 @@
 //
 
 #import "TSViewController.h"
-#import "TSWunderground.h"
 
 @implementation TSViewController
 
@@ -22,6 +21,9 @@
 @synthesize calendar=_calendar;
 @synthesize tallView=_tallView;
 @synthesize foreView=_foreView;
+@synthesize location=_location;
+@synthesize busy=_busy;
+@synthesize searchController=_searchController;
 
 - (void)didReceiveMemoryWarning
 {
@@ -79,9 +81,10 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     if (self.weatherService == nil) {        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherUpdated:) name:TSWeatherReadyNotification object:nil];
         self.weatherService = [[TSWunderground alloc] init];
-        [self.weatherService start];
+        self.weatherService.delegate = self;
+        // XXX DEBUGGING LOCATION
+//        [self.weatherService start];
     }
     
     if (self.secondsTimer == nil) {
@@ -90,12 +93,64 @@
     }
     
     if (self.calendar == nil) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(calendarRedraw:) name:TSCalendarReadyNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(calendarUpdated:) name:EKEventStoreChangedNotification object:nil];
         self.calendar = [[TSCalendar alloc] initWithView:self.calendarView];
+        self.calendar.delegate = self;
         [self.calendar start];
     }
+
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    NSString *locationSetting = [settings stringForKey:@"location"];
+    if (locationSetting == nil) {
+        // Display a busy indicator while we search for the location.
+        if (self.busy == nil) {
+            CGRect bf = CGRectMake(0, 200, 500, 100);
+            self.busy = [[TSBusy alloc] initWithFrame:bf];            
+        }
+        self.busy.activityView.color = [UIColor whiteColor];
+        self.busy.labelView.text = @"Determining Location...";
+        self.busy.labelView.textColor = [UIColor whiteColor];
+        self.busy.labelView.font = [UIFont fontWithName:@"HelveticaNeue" size:30];
+        [self.busy.activityView startAnimating];
+        [self.view addSubview:self.busy.container];
+        if (self.location == nil) {
+            self.location = [[TSLocation alloc] init];
+            self.location.delegate = self;
+        }
+
+        // Start location search.
+        [self.location getLocation];
+    }
+
 }
+
+- (void)locationNeedsInput
+{
+    // Display input view for the location.
+}
+- (void)locationConfirm:(CLLocation *)location
+{
+    // Do a geo lookup with lat/long to get more detail.
+//    [self.weatherService doGeoLookup:location];
+    
+    self.searchController = [[TSLocationSearchController alloc] initWithStyle:UITableViewStylePlain];
+    self.searchController.source = [[TSWundergroundLocationSource alloc] init];
+    self.searchController.source.weatherService = self.weatherService;
+    self.searchController.source.tableController = self.searchController;
+    [self.searchController.source setInitialLocation:location];
+    [self presentViewController:self.searchController animated:YES completion:NULL];    
+}
+/*    // Display alert confirming location.
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Is this your location?" message:[location description] delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    [alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView
+            clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"clicked %i", buttonIndex);
+}*/
+
 
 - (void)calendarUpdated:(NSNotification *)notification
 {
@@ -103,13 +158,13 @@
     [self.calendar spawnTaskNow];
 }
 
-- (void)calendarRedraw:(NSNotification *)notification
+- (void)calendarReady
 {
     NSLog(@"Calendar redraw.");
     [self.calendar redrawCalendar];    
 }
 
-- (void)weatherUpdated:(NSNotification *)notification
+- (void)weatherReady
 {
     NSLog(@"Weather updated.");
     [self.currentView removeFromSuperview];

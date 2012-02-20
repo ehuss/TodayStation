@@ -20,14 +20,13 @@ const static CGRect itemRect = { .origin.x = 10,
                                  .size.height = 38
 };
 
-NSString *TSCalendarReadyNotification = @"TSCalendarReadyNotification";
-
 @implementation TSCalendar
 
 @synthesize calendarView=_calendarView;
 @synthesize eventStore=_eventStore;
 @synthesize gregorian=_gregorian;
 @synthesize events=_events;
+@synthesize delegate=_delegate;
 
 - (id)initWithView:(UIView *)view
 {
@@ -35,11 +34,10 @@ NSString *TSCalendarReadyNotification = @"TSCalendarReadyNotification";
         _gregorian = [[NSCalendar alloc]
                       initWithCalendarIdentifier:NSGregorianCalendar];
         _calendarView = view;
-        self.notificationName = TSCalendarReadyNotification;
         // This probably isn't necessary, since we receive notifications.
         // However, I feel it's better to be on the safe side in case we
         // miss a notification for some reason.
-        updateInterval = 5*60;
+        self.updateInterval = 5*60;
 
         return self;
     }
@@ -260,6 +258,7 @@ NSString *TSCalendarReadyNotification = @"TSCalendarReadyNotification";
     }
     // Get the events.
     self.events = [self getEvents];    
+    [self.delegate performSelectorOnMainThread:@selector(calendarReady) withObject:nil waitUntilDone:NO];
 }
 
 

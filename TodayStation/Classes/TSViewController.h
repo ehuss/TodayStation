@@ -11,8 +11,13 @@
 #import "TSWeatherService.h"
 #import "TSWeatherController.h"
 #import "TSCalendar.h"
+#import "TSLocation.h"
+#import "TSBusy.h"
+#import "TSLocationSearchController.h"
 
-@interface TSViewController : UIViewController
+@interface TSViewController : UIViewController <TSLocationDelegate,
+                                                TSWeatherDelegate,
+                                                TSCalendarDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *timeView;
 @property (weak, nonatomic) IBOutlet UILabel *dateView;
@@ -25,6 +30,9 @@
 @property (weak, nonatomic) UIView *currentView;
 @property (nonatomic, weak) UIView *tallView;
 @property (nonatomic, weak) UIView *foreView;
+@property (nonatomic, strong) TSLocation *location;
+@property (nonatomic, strong) TSBusy *busy;
+@property (nonatomic, strong) TSLocationSearchController *searchController;
 
 - (void)secondsTick:(NSTimer *)timer;
 - (void)updateTime;

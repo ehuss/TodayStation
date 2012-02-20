@@ -12,7 +12,6 @@
   Need to implement some kind of anti-jitter.
   Maybe: After receiving message...wait for a certain period of time, ignoring
   messages, and then fire.
-- Does idle timer remain disabled after sleep/wake?
 
 MAJOR:
 - Auto find location.

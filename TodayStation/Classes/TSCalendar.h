@@ -10,7 +10,11 @@
 #import <EventKit/EventKit.h>
 #import "TSBackgroundService.h"
 
-extern NSString *TSCalendarReadyNotification;
+@protocol TSCalendarDelegate
+
+- (void)calendarReady;
+
+@end
 
 @interface TSCalendar : TSBackgroundService
 
@@ -18,6 +22,7 @@ extern NSString *TSCalendarReadyNotification;
 @property (nonatomic, strong) EKEventStore *eventStore;
 @property (nonatomic, strong) NSCalendar *gregorian;
 @property (nonatomic, strong) NSArray *events;
+@property (nonatomic, weak) NSObject <TSCalendarDelegate> *delegate;
 
 - (id)initWithView:(UIView *)view;
 - (void)redrawCalendar;

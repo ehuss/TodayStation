@@ -14,10 +14,13 @@
 #import "TSWundergroundForeCont.h"
 #import "TSWundergroundHourlyCont.h"
 
+NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/";
+
 @implementation TSWunderground
 
 @synthesize data=_data;
 @synthesize controller=_controller;
+@synthesize geoData=_geoData;
 
 - (TSWundergroundController *)controller
 {
@@ -60,6 +63,7 @@
     }
     
     SBJsonParser *parser = [[SBJsonParser alloc] init];
+    // XXX Error handling.
     self.data = [parser objectWithData:jsonData]; //] error:&error];
     
     //NSLog(@"%@", [self.data description]);
@@ -77,8 +81,7 @@
 - (void)doTask
 {
     [self fetchData];
-    self.status = kTSStatusSuccess;
-    self.lastUpdate = [NSDate date];
+    [self.delegate performSelectorOnMainThread:@selector(weatherReady) withObject:nil waitUntilDone:NO];
 }
 
 - (NSString *)timeAmPmWithHour:(NSInteger)hour minute:(NSInteger)minute
@@ -361,6 +364,32 @@
     //c.moonPhaseView.x = ;
 
     return c.currentView;
+}
+
+- (void)bgGeoLookup:(CLLocation *)location
+{
+    NSString *urlStr = [NSString stringWithFormat:@"%@geolookup/q/%f,%f.json",
+                        wundergroundURL,
+                        location.coordinate.latitude,
+                        location.coordinate.longitude];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSLog(@"Fetching wunderground: %@", url);
+    // XXX STREAM
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    //    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    NSURLResponse *response;
+    NSError *error;
+    NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    if (jsonData == nil) {
+        // XXX Error.
+        return;
+    }
+    // XXX: Error checking.
+    //    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];        
+
+    SBJsonParser *parser = [[SBJsonParser alloc] init];
+    // XXX Error handling.
+    self.geoData = [parser objectWithData:jsonData]; //] error:&error];
 }
 
 @end

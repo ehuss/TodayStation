@@ -13,6 +13,8 @@
 
 @property (atomic, strong) NSDictionary *data;
 @property (nonatomic, strong) TSWundergroundController *controller;
+@property (nonatomic, strong) NSDictionary *geoData;
+
 - (void)fetchData;
 
 @end
