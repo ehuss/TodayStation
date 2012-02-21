@@ -70,25 +70,6 @@ const static CGRect itemRect = { .origin.x = 10,
     return [self sameDay:date to:tomorrow];
 }
 
-- (TSLabel *)getLabelWithBg:(BOOL)bg
-{
-    TSLabel *view = [[TSLabel alloc] initWithFrame:itemRect];
-    view.backgroundColor = [UIColor clearColor];
-    view.textColor = [UIColor whiteColor];
-    view.font = [UIFont fontWithName:@"HelveticaNeue" size:32];
-    view.text = @"test";
-    view.layer.cornerRadius = 8;
-
-    if (bg) {
-        view.gradient = [NSArray arrayWithObjects:(id)[UIColor darkGrayColor].CGColor,
-                         (id)[UIColor blackColor].CGColor,
-                         nil];
-        view.textRect = CGRectOffset(itemRect, 5, 0);
-    }    
-    
-    return view;
-}
-
 - (UIView *)dateHeaderViewFor:(NSDate *)date
 {
     NSString *datePrefix;
@@ -104,7 +85,7 @@ const static CGRect itemRect = { .origin.x = 10,
     [formatter setDateFormat:@"E MMM d"];
     NSString *dateText = [formatter stringFromDate:date];
     
-    TSLabel *view = [self getLabelWithBg:YES];
+    TSLabel *view = createLabel(itemRect, YES);
     view.text = [NSString stringWithFormat:@"%@%@", datePrefix,dateText];
     return view;
 }
@@ -120,7 +101,7 @@ const static CGRect itemRect = { .origin.x = 10,
 
 - (UIView *)viewForEvent:(EKEvent *)event
 {
-    TSLabel *label = [self getLabelWithBg:NO];
+    TSLabel *label = createLabel(itemRect, NO);
     label.textRect = CGRectOffset(itemRect, 10, 0);
     if (event.allDay) {
         label.text = event.title;
@@ -212,7 +193,7 @@ const static CGRect itemRect = { .origin.x = 10,
     }
     // Get the events.
     if (self.events == nil) {
-        TSLabel *noView = [self getLabelWithBg:YES];
+        TSLabel *noView = createLabel(itemRect, YES);
         noView.text = @"No Calendar Events";
         [self.calendarView addSubview:noView];        
     }

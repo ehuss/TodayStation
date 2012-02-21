@@ -27,20 +27,20 @@
     return nil;
 }
 
-- (void)geoLookupWrapper:(CLLocation *)location
+- (void)geoLookupWrapper:(NSString *)query
 {
-    [self bgGeoLookup:location];
+    [self bgGeoLookup:query];
     [self.geoDelegate performSelectorOnMainThread:@selector(geoReady) withObject:nil waitUntilDone:NO];
 }
 
-- (void)doGeoLookup:(CLLocation *)location
+- (void)doGeoLookup:(NSString *)query
 {
-    NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(geoLookupWrapper:) object:location];
+    NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(geoLookupWrapper:) object:query];
     [[NSOperationQueue currentQueue] addOperation:op];    
 }
 
 
-- (void)bgGeoLookup:(CLLocation *)location
+- (void)bgGeoLookup:(NSString *)query
 {
     return;
 }

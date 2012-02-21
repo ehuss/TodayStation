@@ -12,6 +12,7 @@
   Need to implement some kind of anti-jitter.
   Maybe: After receiving message...wait for a certain period of time, ignoring
   messages, and then fire.
+- Line (or something) separating midnight in hourly view.
 
 MAJOR:
 - Auto find location.

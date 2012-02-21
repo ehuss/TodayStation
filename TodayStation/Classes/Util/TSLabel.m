@@ -45,6 +45,7 @@
     if (CGRectEqualToRect(self.textRect, CGRectZero)) {
         [super drawTextInRect:rect];
     } else {
+        // User requested a special rect for the text.
         [super drawTextInRect:self.textRect];        
     }
 }

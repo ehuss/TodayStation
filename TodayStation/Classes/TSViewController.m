@@ -23,7 +23,8 @@
 @synthesize foreView=_foreView;
 @synthesize location=_location;
 @synthesize busy=_busy;
-@synthesize searchController=_searchController;
+@synthesize selectCityCont=_selectCityCont;
+@synthesize selectCityNav=_selectCityNav;
 
 - (void)didReceiveMemoryWarning
 {
@@ -84,7 +85,7 @@
         self.weatherService = [[TSWunderground alloc] init];
         self.weatherService.delegate = self;
         // XXX DEBUGGING LOCATION
-//        [self.weatherService start];
+        [self.weatherService start];
     }
     
     if (self.secondsTimer == nil) {
@@ -100,7 +101,7 @@
     }
 
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    NSString *locationSetting = [settings stringForKey:@"location"];
+    NSString *locationSetting = [settings stringForKey:@"wundergroundQuery"];
     if (locationSetting == nil) {
         // Display a busy indicator while we search for the location.
         if (self.busy == nil) {
@@ -126,31 +127,25 @@
 
 - (void)locationNeedsInput
 {
-    // Display input view for the location.
+    // Display input view for the location (no GPS available).
+    
 }
 - (void)locationConfirm:(CLLocation *)location
 {
-    // Do a geo lookup with lat/long to get more detail.
-//    [self.weatherService doGeoLookup:location];
-    
-    self.searchController = [[TSLocationSearchController alloc] initWithStyle:UITableViewStylePlain];
-    self.searchController.source = [[TSWundergroundLocationSource alloc] init];
-    self.searchController.source.weatherService = self.weatherService;
-    self.searchController.source.tableController = self.searchController;
-    [self.searchController.source setInitialLocation:location];
-    [self presentViewController:self.searchController animated:YES completion:NULL];    
-}
-/*    // Display alert confirming location.
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Is this your location?" message:[location description] delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-    [alertView show];
-}
+    // XXX: Cast until generic.
+    self.selectCityCont = [[TSSelectCityController alloc] initWithStyle:UITableViewStylePlain service:(TSWunderground *)self.weatherService];
 
-- (void)alertView:(UIAlertView *)alertView
-            clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    NSLog(@"clicked %i", buttonIndex);
-}*/
+    self.selectCityNav = [[UINavigationController alloc] initWithRootViewController:self.selectCityCont];
 
+    [self presentViewController:self.selectCityNav
+                       animated:NO completion:NULL];
+
+    // Go straight to the station select.
+    NSString *query = [NSString stringWithFormat:@"%f,%f",
+                       location.coordinate.latitude,
+                       location.coordinate.longitude];
+    [self.selectCityCont pushStationControllerWithQuery:query];
+}
 
 - (void)calendarUpdated:(NSNotification *)notification
 {

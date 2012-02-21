@@ -21,6 +21,10 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 @synthesize data=_data;
 @synthesize controller=_controller;
 @synthesize geoData=_geoData;
+@synthesize autocompleteDelegate=_autocompleteDelegate;
+@synthesize autocompleteOp=_autocompleteOp;
+@synthesize autocompleteTimer=_autocompleteTimer;
+@synthesize lastAutocomplete=_lastAutocomplete;
 
 - (TSWundergroundController *)controller
 {
@@ -36,13 +40,16 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     return _controller;
 }
 
-- (void)fetchData
+- (void)fetchData:(NSString *)query
 {
     TSCache *cache = [TSCache sharedCache];
     // XXX: Match should be location.
-    NSData *jsonData = [cache getForName:@"wunderground" withMatch:@""];
+    NSData *jsonData = [cache getForName:@"wunderground" withMatch:query];
     if (jsonData == nil) {
-        NSURL *url = [NSURL URLWithString:@"http://api.wunderground.com/api/0897152132573769/conditions/forecast/astronomy/hourly/q/37.8,-122.4.json"];
+        NSString *urlStr = [NSString stringWithFormat:@"%@conditions/forecast/astronomy/hourly/q/%@.json",
+                            wundergroundURL,
+                            query];
+        NSURL *url = [NSURL URLWithString:urlStr];
         NSLog(@"Fetching wunderground: %@", url);
         // XXX STREAM
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
@@ -57,7 +64,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
         // XXX: Error checking.
         //    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];        
         // XXX: Only encache if it parses correctly.
-        [cache encacheData:jsonData name:@"wunderground" mustMatch:@"" forTime:600];
+        [cache encacheData:jsonData name:@"wunderground" mustMatch:query forTime:600];
     } else {
         NSLog(@"Fetched wunderground from cache.");
     }
@@ -80,7 +87,12 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 
 - (void)doTask
 {
-    [self fetchData];
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    NSString *query = [settings stringForKey:@"wundergroundQuery"];
+    if (query == nil) {
+        return;
+    }
+    [self fetchData:query];
     [self.delegate performSelectorOnMainThread:@selector(weatherReady) withObject:nil waitUntilDone:NO];
 }
 
@@ -151,8 +163,10 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:[epoch intValue]];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setLocale:[NSLocale currentLocale]];
-    [formatter setDateFormat:@"EEEE"];
+    // Abbreviated day of week.
+    [formatter setDateFormat:@"EEE"];
     cont.dayOfWeekView.text = [formatter stringFromDate:date];
+    // Abbreviated month and day.
     [formatter setDateFormat:@"MMM d"];
     cont.dateView.text = [formatter stringFromDate:date];
     NSDictionary *high = [dayD objectForKey:@"high"];
@@ -175,7 +189,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 }
 
 - (UIView *)buildHourViewForHour:(int)hour
-{
+{    
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     BOOL celsius = [settings boolForKey:@"celsius"];
     
@@ -214,6 +228,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 
 - (UIView *)buildForeView
 {
+    // XXX: Protect against no data.
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 512, 270)];
     
     // XXX assuming 4 days with first being today.
@@ -231,9 +246,10 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 
 - (UIView *)buildTallView
 {
+    // XXX: Protect against no data.
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 280, 511, 488)];
     
-    for (int i=0; i<18; i++) {
+    for (int i=0; i<16; i++) {
         UIView *hourView = [self buildHourViewForHour:i];
         // Move into position.
         CGRect f = hourView.frame;
@@ -242,10 +258,34 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
         [view addSubview:hourView];
     }
     
+    UILabel *lastUpdateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    lastUpdateLabel.text = [self.data tsObjectForKeyPath:@"current_observation.observation_time" numberToString:NO];
+    lastUpdateLabel.backgroundColor = [UIColor clearColor];
+    lastUpdateLabel.textColor = [UIColor lightGrayColor];
+    lastUpdateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+    [lastUpdateLabel sizeToFit];
+    CGRect f = lastUpdateLabel.frame;
+    lastUpdateLabel.frame = CGRectMake(0, 488-f.size.height,
+                                       f.size.width, f.size.height);
+    [view addSubview:lastUpdateLabel];
+    
+    UILabel *locationLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    locationLabel.text = [self.data tsObjectForKeyPath:@"current_observation.observation_location.full" numberToString:NO];
+    locationLabel.backgroundColor = [UIColor clearColor];
+    locationLabel.textColor = [UIColor lightGrayColor];
+    locationLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+    [locationLabel sizeToFit];
+    CGRect updateF = lastUpdateLabel.frame;
+    CGRect locatF = locationLabel.frame;
+    locationLabel.frame = CGRectMake(0, updateF.origin.y-locatF.size.height,
+                                       locatF.size.width, locatF.size.height);
+    [view addSubview:locationLabel];
+
     return view;
 }
 - (UIView *)buildCurrentView
 {
+    // XXX: Protect against no data.
     TSWundergroundController *c = self.controller;
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     BOOL celsius = [settings boolForKey:@"celsius"];
@@ -366,12 +406,11 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     return c.currentView;
 }
 
-- (void)bgGeoLookup:(CLLocation *)location
+- (void)bgGeoLookup:(NSString *)query
 {
-    NSString *urlStr = [NSString stringWithFormat:@"%@geolookup/q/%f,%f.json",
+    NSString *urlStr = [NSString stringWithFormat:@"%@geolookup/q/%@.json",
                         wundergroundURL,
-                        location.coordinate.latitude,
-                        location.coordinate.longitude];
+                        [query stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ];
     NSURL *url = [NSURL URLWithString:urlStr];
     NSLog(@"Fetching wunderground: %@", url);
     // XXX STREAM
@@ -390,6 +429,79 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     SBJsonParser *parser = [[SBJsonParser alloc] init];
     // XXX Error handling.
     self.geoData = [parser objectWithData:jsonData]; //] error:&error];
+}
+
+- (void)startAutocompletePollerOnDelegate:(NSObject <TSWundergroundAutoDelegate>*)delegate
+{
+    NSLog(@"Starting autocomplete timer.");
+    if (self.autocompleteTimer == nil) {
+        self.autocompleteDelegate = delegate;
+        self.autocompleteTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(autocompleteFired:) userInfo:nil repeats:YES];
+    }
+}
+
+- (void)signalAutocompleteWithResults:(NSArray *)results
+{
+    NSLog(@"Signaling with %i results", [results count]);
+    [self.autocompleteDelegate performSelectorOnMainThread:@selector(setResultsForAutocomplete:) withObject:results waitUntilDone:NO];
+}
+
+- (void)autocompleteFired:(NSTimer *) timer
+{
+    NSLog(@"timer fired");
+    NSString *currentString = [self.autocompleteDelegate getCurrentSearchString];
+    if (self.lastAutocomplete==nil || [self.lastAutocomplete compare:currentString]!=NSOrderedSame) {
+        NSLog(@"Search string changed.");
+        // Search string has changed.  See if there is an op in progress.
+        if (self.autocompleteOp==nil || [self.autocompleteOp isFinished]) {
+            NSLog(@"autocomplete not running, starting");
+            self.lastAutocomplete = currentString;
+            self.autocompleteOp = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(fetchAutocomplete) object:nil];
+            [[NSOperationQueue currentQueue] addOperation:self.autocompleteOp];        
+        }
+    }
+}
+
+- (void)fetchAutocomplete
+{
+    // XXX: Will wunderground ever return a value "type"!="city"?
+    if ([self.autocompleteOp isCancelled]) {
+        return;
+    }
+    if ([self.lastAutocomplete length]==0) {
+        NSLog(@"empty search string");
+        [self signalAutocompleteWithResults:[NSArray array]];
+        return;        
+    }
+    NSString *escaped = [self.lastAutocomplete stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *urlStr = [NSString stringWithFormat:@"http://autocomplete.wunderground.com/aq?query=%@&format=JSON", escaped];
+    NSLog(@"Wunderground autocomplete: %@", urlStr);
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    NSURLResponse *response;
+    NSError *error;
+    NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    if (jsonData == nil) {
+        // XXX: Error handling.
+        [self signalAutocompleteWithResults:[NSArray array]];
+        return;
+    }
+    if ([self.autocompleteOp isCancelled]) {
+        return;
+    }
+    SBJsonParser *parser = [[SBJsonParser alloc] init];
+    NSDictionary *resultsD = [parser objectWithData:jsonData];
+    // XXX: Error handling.
+    NSArray *results = [resultsD objectForKey:@"RESULTS"];
+    [self signalAutocompleteWithResults:results];
+}
+
+- (void)stopAutocompletePoller
+{
+    NSLog(@"Stopping autocomplete.");
+    [self.autocompleteTimer invalidate];
+    self.autocompleteTimer = nil;
+    [self.autocompleteOp cancel];
 }
 
 @end

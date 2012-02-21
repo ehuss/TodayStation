@@ -9,12 +9,28 @@
 #import "TSWeatherService.h"
 #import "TSWundergroundController.h"
 
-@interface TSWunderground : TSWeatherService <NSXMLParserDelegate>
+@protocol TSWundergroundAutoDelegate
 
+- (NSString *)getCurrentSearchString;
+- (void)setResultsForAutocomplete:(NSArray *)results;
+
+@end
+
+@interface TSWunderground : TSWeatherService
+
+// Data holds the last weather query.
 @property (atomic, strong) NSDictionary *data;
 @property (nonatomic, strong) TSWundergroundController *controller;
+
+// Geo data is used for looking up stations.
 @property (nonatomic, strong) NSDictionary *geoData;
 
-- (void)fetchData;
+// Autocomplete properties.
+@property (nonatomic, weak) NSObject <TSWundergroundAutoDelegate>*autocompleteDelegate;
+@property (atomic, strong) NSOperation *autocompleteOp;
+@property (nonatomic, strong) NSTimer *autocompleteTimer;
+@property (nonatomic, copy) NSString *lastAutocomplete;
 
+- (void)startAutocompletePollerOnDelegate:(NSObject <TSWundergroundAutoDelegate>*)delegate;
+- (void)stopAutocompletePoller;
 @end

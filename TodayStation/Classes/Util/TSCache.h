@@ -15,6 +15,10 @@
 
 @interface TSCache : NSObject
 
+@property (nonatomic, strong) NSURL *cacheDir;
+@property (nonatomic, strong) NSURL *plistURL;
+@property (nonatomic, strong) NSMutableDictionary *plist;
+
 + (TSCache *)sharedCache;
 
 - (void)encacheData:(NSData *)data 
@@ -28,7 +32,4 @@
 // Private
 - (void)loadPlist;
 
-@property (nonatomic, strong) NSURL *cacheDir;
-@property (nonatomic, strong) NSURL *plistURL;
-@property (nonatomic, strong) NSMutableDictionary *plist;
 @end

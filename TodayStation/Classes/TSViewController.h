@@ -13,7 +13,7 @@
 #import "TSCalendar.h"
 #import "TSLocation.h"
 #import "TSBusy.h"
-#import "TSLocationSearchController.h"
+#import "TSSelectCityController.h"
 
 @interface TSViewController : UIViewController <TSLocationDelegate,
                                                 TSWeatherDelegate,
@@ -32,8 +32,8 @@
 @property (nonatomic, weak) UIView *foreView;
 @property (nonatomic, strong) TSLocation *location;
 @property (nonatomic, strong) TSBusy *busy;
-@property (nonatomic, strong) TSLocationSearchController *searchController;
-
+@property (nonatomic, strong) TSSelectCityController *selectCityCont;
+@property (nonatomic, strong) UINavigationController *selectCityNav;
 - (void)secondsTick:(NSTimer *)timer;
 - (void)updateTime;
 

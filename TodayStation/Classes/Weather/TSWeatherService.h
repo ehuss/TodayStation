@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreLocation/CoreLocation.h>
 #import "TSWeatherController.h"
 #import "TSBackgroundService.h"
 
@@ -39,13 +38,13 @@
 @property (nonatomic, weak) NSObject <TSWeatherGeoDelegate> *geoDelegate;
 
 // Calls bgGeoLookup via an NSOperation in the background.
-- (void)doGeoLookup:(CLLocation *)location;
+- (void)doGeoLookup:(NSString *)query;
 
 // Methods subclasses must implement.
 - (UIView *)buildForeView;
 - (UIView *)buildTallView;
 - (UIView *)buildCurrentView;
-- (void)bgGeoLookup:(CLLocation *)location;
+- (void)bgGeoLookup:(NSString *)query;
 
 
 @end

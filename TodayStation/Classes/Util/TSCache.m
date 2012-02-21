@@ -34,6 +34,7 @@ static TSCache *theSharedCache = nil;
     if (_cacheDir != nil) {
         return _cacheDir;
     }
+    NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
     NSFileManager *manager = [NSFileManager defaultManager];
     NSError *error;
     NSURL *cachesURL = [manager URLForDirectory:NSCachesDirectory
@@ -45,8 +46,8 @@ static TSCache *theSharedCache = nil;
         NSLog(@"Failed to caches directory: %@", [error localizedDescription]);
         return nil;
     }
-    _cacheDir = [cachesURL URLByAppendingPathComponent:@"TSCache"
-                                           isDirectory:YES];
+    _cacheDir = [[cachesURL URLByAppendingPathComponent:bundleID
+                                           isDirectory:YES] URLByAppendingPathComponent:@"TSCache" isDirectory:YES];
     
     if (![manager createDirectoryAtURL:_cacheDir withIntermediateDirectories:YES attributes:nil error:&error]) {
         NSLog(@"Failed to create caches dir: %@", [error localizedDescription]);
