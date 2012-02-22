@@ -10,6 +10,7 @@
 #import "TSCalendar.h"
 #import "TSUtil.h"
 #import "TSLabel.h"
+#import "TSSettings.h"
 
 const static NSUInteger dateFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
 const static NSUInteger dateTimeFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
@@ -109,7 +110,7 @@ const static CGRect itemRect = { .origin.x = 10,
         NSString *time;
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setLocale:[NSLocale currentLocale]];
-        if (is24h) {
+        if (currentTimeUnit()==TSTime24Hour) {
             [formatter setDateFormat:@"HH:mm"];
         } else {
             NSDateComponents *comp = [_gregorian components:dateTimeFlags fromDate:event.startDate];

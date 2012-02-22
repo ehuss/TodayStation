@@ -51,6 +51,7 @@ static TSCache *theSharedCache = nil;
     
     if (![manager createDirectoryAtURL:_cacheDir withIntermediateDirectories:YES attributes:nil error:&error]) {
         NSLog(@"Failed to create caches dir: %@", [error localizedDescription]);
+        return nil;
     }
     return _cacheDir;
 }

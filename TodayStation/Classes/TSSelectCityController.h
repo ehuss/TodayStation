@@ -16,9 +16,6 @@
 @property (nonatomic, strong) UISearchDisplayController *searchCont;
 @property (nonatomic, strong) TSRecent *recent;
 @property (nonatomic, strong) NSArray *searchResults;
-@property (nonatomic, weak) TSWunderground *service;
-
-- (id)initWithStyle:(UITableViewStyle)style service:(TSWunderground *)service;
 
 - (void)pushStationControllerWithQuery:(NSString *)query;
 @end

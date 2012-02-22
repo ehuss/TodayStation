@@ -13,7 +13,6 @@
 
 @interface TSSelectStationController : UITableViewController <TSWeatherGeoDelegate>
 
-@property (nonatomic, weak) TSWunderground *service;
 @property (nonatomic, copy) NSString *locationQuery;
 
 // Results objects set once geo data is available
@@ -22,5 +21,4 @@
 @property (nonatomic, strong) NSArray *airportResults;
 @property (nonatomic, strong) NSArray *pwsResults;
 
-- (id)initWithStyle:(UITableViewStyle)style service:(TSWunderground *)service;
 @end

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TSSettings : UITableViewController
+@interface TSSettingsController : UITableViewController
 
 @end

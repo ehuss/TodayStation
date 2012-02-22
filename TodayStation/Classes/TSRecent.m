@@ -38,7 +38,15 @@ static TSRecent *theSharedRecent = nil;
         NSLog(@"Failed to app support directory: %@", [error localizedDescription]);
         return nil;
     }
-    NSURL *recentURL = [[appSupURL URLByAppendingPathComponent:bundleID isDirectory:YES] URLByAppendingPathComponent:@"TSRecent.plist"];
+    NSURL *recentDir = [appSupURL URLByAppendingPathComponent:bundleID isDirectory:YES];
+
+    if (![manager createDirectoryAtURL:recentDir withIntermediateDirectories:YES attributes:nil error:&error]) {
+        NSLog(@"Failed to create caches dir: %@", [error localizedDescription]);
+        return nil;
+    }
+    
+    NSURL *recentURL = [recentDir URLByAppendingPathComponent:@"TSRecent.plist"];
+    
     return recentURL;
 }
 
@@ -75,6 +83,24 @@ static TSRecent *theSharedRecent = nil;
 {
     // XXX: Check current service from settings.
     return [self arrayForService:@"wunderground"];
+}
+
+- (void)addEntryWithName:(NSString *)name type:(NSString *)type query:(NSString *)query
+{
+    NSMutableArray *entries = [self arrayForCurrentService];
+    BOOL found=NO;
+    for (NSDictionary *entry in entries) {
+        NSString *entryId = [entry objectForKey:@"id"];
+        if ([entryId compare:query]==NSOrderedSame) {
+            found = YES;
+            break;
+        }
+    }
+    if (!found) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObjectsAndKeys:name, @"name", type, @"type", query, @"id", nil];
+        [entries addObject:entry];
+        [self save];
+    }
 }
 
 @end

@@ -8,6 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TSSettings : NSObject
+typedef enum {
+    TSTempDefault,
+    TSTempCelsius,
+    TSTempFahrenheit,
+} TSTempUnit;
 
-@end
+typedef enum {
+    TSTimeDefault,
+    TSTime24Hour,
+    TSTime12Hour,
+} TSTimeUnit;
+
+extern TSTempUnit currentTempUnit(void);
+extern TSTimeUnit currentTimeUnit(void);
+
+extern void guess24hour(void);

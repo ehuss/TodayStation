@@ -36,5 +36,7 @@ id examples:
 - (void)save;
 - (NSMutableArray *)arrayForService:(NSString *)service;
 - (NSMutableArray *)arrayForCurrentService;
+// This calls save if the entry is new.
+- (void)addEntryWithName:(NSString *)name type:(NSString *)type query:(NSString *)query;
 
 @end

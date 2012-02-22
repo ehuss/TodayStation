@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "TSWunderground.h"
-#import "TSWeatherService.h"
 #import "TSWeatherController.h"
 #import "TSCalendar.h"
 #import "TSLocation.h"
@@ -24,9 +23,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *secondsView;
 @property (weak, nonatomic) IBOutlet UILabel *periodView;
 @property (weak, nonatomic) IBOutlet UIView *calendarView;
+@property (weak, nonatomic) IBOutlet UIButton *settingsButton;
 @property (strong, nonatomic) TSCalendar *calendar;
 @property (nonatomic, strong) NSTimer *secondsTimer;
-@property (nonatomic, strong) TSWeatherService *weatherService;
 @property (weak, nonatomic) UIView *currentView;
 @property (nonatomic, weak) UIView *tallView;
 @property (nonatomic, weak) UIView *foreView;
@@ -34,6 +33,7 @@
 @property (nonatomic, strong) TSBusy *busy;
 @property (nonatomic, strong) TSSelectCityController *selectCityCont;
 @property (nonatomic, strong) UINavigationController *selectCityNav;
+@property (nonatomic, strong) UINavigationController *settingsNav;
 - (void)secondsTick:(NSTimer *)timer;
 - (void)updateTime;
 

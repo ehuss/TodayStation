@@ -8,6 +8,7 @@
 
 #import "TSAppDelegate.h"
 #import "TSUtil.h"
+#import "TSSettings.h"
 
 @implementation TSAppDelegate
 

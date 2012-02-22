@@ -14,17 +14,6 @@
 @synthesize searchCont=_searchCont;
 @synthesize recent=_recent;
 @synthesize searchResults=_searchResults;
-@synthesize service=_service;
-
-- (id)initWithStyle:(UITableViewStyle)style service:(TSWunderground *)service
-{
-    self = [super initWithStyle:style];
-    if (self) {        
-        self.service = service;
-    }
-    return self;
-}
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -159,7 +148,7 @@
 
 - (void)pushStationControllerWithQuery:(NSString *)query
 {
-    TSSelectStationController *controller = [[TSSelectStationController alloc] initWithStyle:UITableViewStylePlain service:self.service];
+    TSSelectStationController *controller = [[TSSelectStationController alloc] initWithStyle:UITableViewStylePlain];
     controller.locationQuery = query;
     [[self navigationController] pushViewController:controller animated:YES];
 }
@@ -170,7 +159,9 @@
     //SELECTED!!
     // For some reason, the WillEndSearch method does not get
     // called in this case.
-    [self.service stopAutocompletePoller];
+    // XXX Cast.
+    TSWunderground *service = (TSWunderground *)[TSWeatherService sharedWeatherService];
+    [service stopAutocompletePoller];
 
     
     /*
@@ -196,12 +187,16 @@
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
 {
-    [self.service startAutocompletePollerOnDelegate:self];    
+    // XXX: cast
+    TSWunderground *service = (TSWunderground *)[TSWeatherService sharedWeatherService];
+    [service startAutocompletePollerOnDelegate:self];    
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
 {
-    [self.service stopAutocompletePoller];
+    // XXX: cast
+    TSWunderground *service = (TSWunderground *)[TSWeatherService sharedWeatherService];
+    [service stopAutocompletePoller];
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString

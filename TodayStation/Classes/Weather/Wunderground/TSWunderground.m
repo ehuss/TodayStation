@@ -13,6 +13,8 @@
 #import "TSUtil.h"
 #import "TSWundergroundForeCont.h"
 #import "TSWundergroundHourlyCont.h"
+#import "TSSettings.h"
+#import "TSColors.h"
 
 NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/";
 
@@ -32,9 +34,9 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard"
                                                              bundle:[NSBundle mainBundle]];
         TSWundergroundController * controller = [storyboard instantiateViewControllerWithIdentifier:@"Wunderbug Controller"];
-        // XXX: Current View size is all funky.
         if (controller.view) {
             self.controller = controller;
+            TScolorize(controller.currentView);
         }
     }
     return _controller;
@@ -99,7 +101,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 - (NSString *)timeAmPmWithHour:(NSInteger)hour minute:(NSInteger)minute
 {
     NSString *result;
-    if (is24h) {
+    if (currentTimeUnit()==TSTime24Hour) {
         if (minute == -1) {
             result = [NSString stringWithFormat:@"%i",
                       hour];
@@ -138,6 +140,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     TSWundergroundForeCont * controller = [storyboard instantiateViewControllerWithIdentifier:@"Wunderground Fore Cont"];
     // XXX: Current View size is all funky.
     if (controller.view) {
+        TScolorize(controller.view);
         return controller;
     } else {
         // XXX: fatal error.
@@ -148,8 +151,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 
 - (UIView *)buildDayViewForDay:(int)dayNum
 {
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    BOOL celsius = [settings boolForKey:@"celsius"];
+    TSTempUnit tempUnit = currentTempUnit();
 
     TSWundergroundForeCont *cont = [self getForecastDayCont];
     NSArray *days = [self.data tsObjectForKeyPath:@"forecast.simpleforecast.forecastday" numberToString:NO];
@@ -171,7 +173,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     cont.dateView.text = [formatter stringFromDate:date];
     NSDictionary *high = [dayD objectForKey:@"high"];
     NSDictionary *low = [dayD objectForKey:@"low"];
-    if (celsius) {
+    if (tempUnit == TSTempCelsius) {
         cont.hiLowView.text = [NSString stringWithFormat:@"%@\xc2\xb0/%@\xc2\xb0",
                                [high objectForKey:@"celsius"],
                                [low objectForKey:@"celsius"]];
@@ -188,21 +190,18 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     return cont.dayView;
 }
 
+- (UILabel *)createHourLabel:(CGRect)frame
+{
+    TSLabel *label = createLabel(frame, NO);
+    label.textAlignment = UITextAlignmentRight;
+    label.font = [UIFont fontWithName:@"HelveticaNeue" size:27];
+    return label;
+}
+
 - (UIView *)buildHourViewForHour:(int)hour
 {    
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    BOOL celsius = [settings boolForKey:@"celsius"];
-    
-    // Get a controller.
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard"
-                                                         bundle:[NSBundle mainBundle]];
-    TSWundergroundHourlyCont * cont = [storyboard instantiateViewControllerWithIdentifier:@"Wunderground Hourly Cont"];
-    // XXX: Current View size is all funky.
-    // Force view to init.
-    if (cont.view == nil) {
-        // XXX Fatal error;
-        return nil;
-    }
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 231, 27)];
+    TSTempUnit tempUnit = currentTempUnit();
 
     NSArray *hours = [self.data objectForKey:@"hourly_forecast"];
     if (hours == nil) {
@@ -212,18 +211,24 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     }
     NSDictionary *hourD = [hours objectAtIndex:hour];
     NSNumber *hourN = [hourD tsObjectForKeyPath:@"FCTTIME.hour" numberToString:NO];
-    cont.timeView.text = [self timeAmPmWithHour:[hourN intValue] minute:-1];
+    UILabel *timeLabel = [self createHourLabel:CGRectMake(0, 0, 74, 27)];
+    timeLabel.text = [self timeAmPmWithHour:[hourN intValue] minute:-1];
     NSDictionary *tempD = [hourD objectForKey:@"temp"];
-    if (celsius) {
-        cont.tempView.text = [NSString stringWithFormat:@"%@\xc2\xb0",
+    UILabel *tempLabel = [self createHourLabel:CGRectMake(82, 0, 57, 27)];
+    if (tempUnit == TSTempCelsius) {
+        tempLabel.text = [NSString stringWithFormat:@"%@\xc2\xb0",
                               [tempD objectForKey:@"metric"]];
     } else {
-        cont.tempView.text = [NSString stringWithFormat:@"%@\xc2\xb0",
+        tempLabel.text = [NSString stringWithFormat:@"%@\xc2\xb0",
                               [tempD objectForKey:@"english"]];
     }
-    cont.popView.text = [NSString stringWithFormat:@"%@%%",
+    UILabel *popLabel = [self createHourLabel:CGRectMake(147, 0, 84, 27)];
+    popLabel.text = [NSString stringWithFormat:@"%@%%",
                          [hourD objectForKey:@"pop"]];
-    return cont.hourView;    
+    [view addSubview:timeLabel];
+    [view addSubview:tempLabel];
+    [view addSubview:popLabel];
+    return view;
 }
 
 - (UIView *)buildForeView
@@ -248,6 +253,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 {
     // XXX: Protect against no data.
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 280, 511, 488)];
+    view.userInteractionEnabled = NO;
     
     for (int i=0; i<16; i++) {
         UIView *hourView = [self buildHourViewForHour:i];
@@ -257,27 +263,35 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
                                     f.size.width, f.size.height);
         [view addSubview:hourView];
     }
+    for (int i=0; i<16; i++) {
+        UIView *hourView = [self buildHourViewForHour:i+16];
+        // Move into position.
+        CGRect f = hourView.frame;
+        hourView.frame = CGRectMake(250, f.size.height*i,
+                                    f.size.width, f.size.height);
+        [view addSubview:hourView];
+    }
     
     UILabel *lastUpdateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     lastUpdateLabel.text = [self.data tsObjectForKeyPath:@"current_observation.observation_time" numberToString:NO];
     lastUpdateLabel.backgroundColor = [UIColor clearColor];
-    lastUpdateLabel.textColor = [UIColor lightGrayColor];
+    lastUpdateLabel.textColor = [TSColors theCurrentColor].deemphasizedColor;
     lastUpdateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
     [lastUpdateLabel sizeToFit];
     CGRect f = lastUpdateLabel.frame;
-    lastUpdateLabel.frame = CGRectMake(0, 488-f.size.height,
+    lastUpdateLabel.frame = CGRectMake(501-f.size.width, 488-f.size.height,
                                        f.size.width, f.size.height);
     [view addSubview:lastUpdateLabel];
     
     UILabel *locationLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     locationLabel.text = [self.data tsObjectForKeyPath:@"current_observation.observation_location.full" numberToString:NO];
     locationLabel.backgroundColor = [UIColor clearColor];
-    locationLabel.textColor = [UIColor lightGrayColor];
+    locationLabel.textColor = [TSColors theCurrentColor].deemphasizedColor;
     locationLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
     [locationLabel sizeToFit];
     CGRect updateF = lastUpdateLabel.frame;
     CGRect locatF = locationLabel.frame;
-    locationLabel.frame = CGRectMake(0, updateF.origin.y-locatF.size.height,
+    locationLabel.frame = CGRectMake(501-locatF.size.width, updateF.origin.y-locatF.size.height,
                                        locatF.size.width, locatF.size.height);
     [view addSubview:locationLabel];
 
@@ -287,8 +301,8 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 {
     // XXX: Protect against no data.
     TSWundergroundController *c = self.controller;
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    BOOL celsius = [settings boolForKey:@"celsius"];
+    TScolorize(c.currentView);
+    TSTempUnit tempUnit = currentTempUnit();
     
     // ======================================================================
     // Current Conditions
@@ -302,7 +316,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 
     // Temperature.
     NSString *curTemp;
-    if (celsius) {
+    if (tempUnit == TSTempCelsius) {
         curTemp = [NSString stringWithFormat:@"%@\xc2\xb0", [currentObs objectForKey:@"temp_c"]];
     } else {
         curTemp = [NSString stringWithFormat:@"%@\xc2\xb0", [currentObs objectForKey:@"temp_f"]];        
@@ -357,7 +371,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
         NSDictionary *highD = [forecast objectForKey:@"high"];
         NSDictionary *lowD = [forecast objectForKey:@"low"];
         NSString *high, *low;
-        if (celsius) {
+        if (tempUnit == TSTempCelsius) {
             high = [NSString stringWithFormat:@"%@\xc2\xb0", [highD objectForKey:@"celsius"]];
             low = [NSString stringWithFormat:@"%@\xc2\xb0", [lowD objectForKey:@"celsius"]];
         } else {

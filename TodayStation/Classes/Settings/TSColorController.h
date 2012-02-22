@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TSColors.h"
 
-@interface TSColorController : UIViewController
+@interface TSColorController : UIViewController <UIPickerViewDelegate>
+
+@property (nonatomic, strong) UIPickerView *pickerView;
+@property (nonatomic, weak) TSColors *colors;
 
 @end

@@ -37,6 +37,8 @@
 @property (nonatomic, weak) NSObject <TSWeatherDelegate> *delegate;
 @property (nonatomic, weak) NSObject <TSWeatherGeoDelegate> *geoDelegate;
 
++ (TSWeatherService *)sharedWeatherService;
+
 // Calls bgGeoLookup via an NSOperation in the background.
 - (void)doGeoLookup:(NSString *)query;
 

@@ -6,7 +6,10 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#import "TSSettingsController.h"
 #import "TSViewController.h"
+#import "TSSettings.h"
+#import "TSColors.h"
 
 @implementation TSViewController
 
@@ -14,10 +17,10 @@
 @synthesize dateView=_dateView;
 @synthesize periodView=_periodView;
 @synthesize calendarView = _calendarView;
+@synthesize settingsButton = _settingsButton;
 @synthesize currentView = _currentView;
 @synthesize timeView = _timeView;
 @synthesize secondsTimer=_secondsTimer;
-@synthesize weatherService=_weatherService;
 @synthesize calendar=_calendar;
 @synthesize tallView=_tallView;
 @synthesize foreView=_foreView;
@@ -25,6 +28,7 @@
 @synthesize busy=_busy;
 @synthesize selectCityCont=_selectCityCont;
 @synthesize selectCityNav=_selectCityNav;
+@synthesize settingsNav=_settingsNav;
 
 - (void)didReceiveMemoryWarning
 {
@@ -40,9 +44,13 @@
 {
     NSDate *currentDate = [NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    // XXX: 24-hour is HH
-    [dateFormatter setDateFormat:@"h:mm"];
-    self.timeView.text = [dateFormatter stringFromDate:currentDate];
+    if (currentTimeUnit() == TSTime24Hour) {
+        [dateFormatter setDateFormat:@"HH:mm"];
+        self.timeView.text = [dateFormatter stringFromDate:currentDate];
+    } else {
+        [dateFormatter setDateFormat:@"h:mm"];
+        self.timeView.text = [dateFormatter stringFromDate:currentDate];
+    }
     
     [dateFormatter setDateFormat:@"ss"];
     self.secondsView.text = [dateFormatter stringFromDate:currentDate];
@@ -60,33 +68,32 @@
     [self updateTime];
 }
 
+- (void)setColors
+{
+    TSColor *currentColor = [TSColors theCurrentColor];
+    self.view.backgroundColor = currentColor.backgroundColor;
+    self.timeView.textColor = currentColor.textColor;
+    self.timeView.backgroundColor = currentColor.backgroundColor;
+    self.dateView.textColor = currentColor.textColor;
+    self.dateView.backgroundColor = currentColor.backgroundColor;
+    self.secondsView.textColor = currentColor.textColor;
+    self.secondsView.backgroundColor = currentColor.backgroundColor;
+    self.periodView.textColor = currentColor.textColor;
+    self.periodView.backgroundColor = currentColor.backgroundColor;
+    self.calendarView.backgroundColor = currentColor.backgroundColor;
+}
 
-/*
- - (void)viewDidLoad
- {
- NSLog(@"viewDidLoad %f,%f,%f,%f", self.view.frame.origin.x,
- self.view.frame.origin.y,
- self.view.frame.size.width,
- self.view.frame.size.height);
- }
- 
- - (void)viewWillAppear:(BOOL)animated
- {
- NSLog(@"viewWillAppear %f,%f,%f,%f", self.view.frame.origin.x,
- self.view.frame.origin.y,
- self.view.frame.size.width,
- self.view.frame.size.height);
- }
- */
+- (void)viewDidLoad
+{
+    [self setColors];
+    [super viewDidLoad];
+}
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    if (self.weatherService == nil) {        
-        self.weatherService = [[TSWunderground alloc] init];
-        self.weatherService.delegate = self;
-        // XXX DEBUGGING LOCATION
-        [self.weatherService start];
-    }
+    TSWeatherService *weatherService = [TSWeatherService sharedWeatherService];
+    weatherService.delegate = self;
+    [weatherService start];
     
     if (self.secondsTimer == nil) {
         [self updateTime];
@@ -108,9 +115,9 @@
             CGRect bf = CGRectMake(0, 200, 500, 100);
             self.busy = [[TSBusy alloc] initWithFrame:bf];            
         }
-        self.busy.activityView.color = [UIColor whiteColor];
+        self.busy.activityView.color = [TSColors theCurrentColor].textColor;
         self.busy.labelView.text = @"Determining Location...";
-        self.busy.labelView.textColor = [UIColor whiteColor];
+        self.busy.labelView.textColor = [TSColors theCurrentColor].textColor;
         self.busy.labelView.font = [UIFont fontWithName:@"HelveticaNeue" size:30];
         [self.busy.activityView startAnimating];
         [self.view addSubview:self.busy.container];
@@ -123,6 +130,40 @@
         [self.location getLocation];
     }
 
+    [self.settingsButton addTarget:self action:@selector(settingsTouched) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsUpdated:) name:NSUserDefaultsDidChangeNotification object:nil];
+}
+
+- (void)settingsUpdated:(NSNotification *)notification
+{
+    // This is a little sloppy.
+    [[TSColors sharedColors] configUpdated];
+    [self setColors];
+    [self weatherReady];
+    [self calendarReady];
+}
+
+- (void)settingsTouched
+{
+    TSSettingsController *settingsCont = [[TSSettingsController alloc] initWithStyle:UITableViewStyleGrouped];
+    self.settingsNav = [[UINavigationController alloc] initWithRootViewController:settingsCont];
+    self.settingsNav.toolbarHidden = NO;
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(settingsDone)];
+    settingsCont.toolbarItems = [NSArray arrayWithObjects:item, nil];
+    // I would really prefer a smaller (less width) display.
+    // However, presentViewController forces a resize of the navigation
+    // controller.  I could write my own "present view controller" code, but
+    // PageSheet is close enough.
+    self.settingsNav.modalPresentationStyle = UIModalPresentationPageSheet;
+    [self presentViewController:self.settingsNav animated:YES completion:NULL];
+}
+
+- (void)settingsDone
+{
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    [settings synchronize];
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)locationNeedsInput
@@ -133,7 +174,7 @@
 - (void)locationConfirm:(CLLocation *)location
 {
     // XXX: Cast until generic.
-    self.selectCityCont = [[TSSelectCityController alloc] initWithStyle:UITableViewStylePlain service:(TSWunderground *)self.weatherService];
+    self.selectCityCont = [[TSSelectCityController alloc] initWithStyle:UITableViewStylePlain];
 
     self.selectCityNav = [[UINavigationController alloc] initWithRootViewController:self.selectCityCont];
 
@@ -165,10 +206,12 @@
     [self.currentView removeFromSuperview];
     [self.foreView removeFromSuperview];
     [self.tallView removeFromSuperview];
-    
-    self.currentView = [self.weatherService buildCurrentView];
-    self.foreView = [self.weatherService buildForeView];
-    self.tallView = [self.weatherService buildTallView];
+
+    TSWeatherService *service = [TSWeatherService sharedWeatherService];
+
+    self.currentView = [service buildCurrentView];
+    self.foreView = [service buildForeView];
+    self.tallView = [service buildTallView];
 
     [self.view addSubview:self.currentView];
     [self.view addSubview:self.foreView];
@@ -192,14 +235,6 @@
  self.view.frame.size.height);
  }*/
 
-/*
- // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
- - (void)viewDidLoad
- {
- [super viewDidLoad];
- }
- */
-
 - (void)viewDidUnload
 {
     [self setTimeView:nil];
@@ -208,6 +243,7 @@
     [self setPeriodView:nil];
     [self setCurrentView:nil];
     [self setCalendarView:nil];
+    [self setSettingsButton:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

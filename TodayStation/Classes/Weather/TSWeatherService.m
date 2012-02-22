@@ -7,10 +7,24 @@
 //
 
 #import "TSWeatherService.h"
+// Import for singleton.
+#import "TSWunderground.h"
 
 @implementation TSWeatherService
 @synthesize delegate =_delegate;
 @synthesize geoDelegate=_geoDelegate;
+
+static TSWeatherService *theSharedWeatherService = nil;
+
++ (TSWeatherService *)sharedWeatherService
+{
+    if (theSharedWeatherService == nil) {
+        // Currently hardcoded, but could be made dynamic.
+        TSWunderground *wunderground = [[TSWunderground alloc] init];
+        theSharedWeatherService = wunderground;
+    }
+    return theSharedWeatherService;
+}
 
 - (UIView *)buildForeView
 {

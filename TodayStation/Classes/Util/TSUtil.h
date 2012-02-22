@@ -9,7 +9,4 @@
 #import <Foundation/Foundation.h>
 #import "TSLabel.h"
 
-extern BOOL is24h;
-
-extern void guess24hour(void);
 TSLabel * createLabel(CGRect frame, BOOL bg);

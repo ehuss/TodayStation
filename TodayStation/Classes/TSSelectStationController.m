@@ -10,20 +10,10 @@
 
 @implementation TSSelectStationController
 
-@synthesize service=_service;
 @synthesize locationQuery=_locationQuery;
 @synthesize locationResults=_locationResults;
 @synthesize airportResults=_airportResults;
 @synthesize pwsResults=_pwsResults;
-
-- (id)initWithStyle:(UITableViewStyle)style service:(TSWunderground *)service
-{
-    self = [super initWithStyle:style];
-    if (self) {        
-        self.service = service;
-    }
-    return self;
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -35,7 +25,8 @@
 
 - (void)geoReady
 {
-    NSDictionary *queryResults = self.service.geoData;
+    TSWunderground *service = (TSWunderground *)[TSWeatherService sharedWeatherService];
+    NSDictionary *queryResults = service.geoData;
     if (queryResults) {
         NSDictionary *location = [queryResults objectForKey:@"location"];
         if (location) {
@@ -62,10 +53,11 @@
 
 - (void)viewDidLoad
 {
+    TSWunderground *service = (TSWunderground *)[TSWeatherService sharedWeatherService];
     self.title = @"Select a Station";
 	self.tableView.scrollEnabled = YES;
-    self.service.geoDelegate = self;
-    [self.service doGeoLookup:self.locationQuery];
+    service.geoDelegate = self;
+    [service doGeoLookup:self.locationQuery];
     // XXX: Enable bounces zoom?
     // XXX: How to display cancel button?
     
@@ -157,6 +149,26 @@
     }
 }
 
+- (NSString *)nameForLocation
+{
+    NSDictionary *l = self.locationResults;
+    // City, state always there?
+    return [NSString stringWithFormat:@"%@, %@",
+                           [l objectForKey:@"city"],
+                           [l objectForKey:@"state"]];
+}
+- (NSString *)nameForAirport:(NSDictionary *)d
+{
+    return [NSString stringWithFormat:@"%@, %@ (%@)",
+                           [d objectForKey:@"city"],
+                           [d objectForKey:@"state"],
+                           [d objectForKey:@"icao"]];
+}
+- (NSString *)nameForPws:(NSDictionary *)d
+{
+    return [d objectForKey:@"neighborhood"];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellIdentifier;
@@ -180,17 +192,10 @@
     
     
     if (indexPath.section == 0) {
-        NSDictionary *l = self.locationResults;
-        // City, state always there?
-        cell.textLabel.text = [NSString stringWithFormat:@"%@, %@",
-                               [l objectForKey:@"city"],
-                               [l objectForKey:@"state"]];
+        cell.textLabel.text = [self nameForLocation];
     } else if (indexPath.section == 1) {
         NSDictionary *d = [self.airportResults objectAtIndex:indexPath.row];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@, %@ (%@)",
-                               [d objectForKey:@"city"],
-                               [d objectForKey:@"state"],
-                               [d objectForKey:@"icao"]];
+        cell.textLabel.text = [self nameForAirport:d];
     } else if (indexPath.section == 2) {
         NSDictionary *d = [self.pwsResults objectAtIndex:indexPath.row];
         cell.textLabel.text = [d objectForKey:@"neighborhood"];
@@ -215,6 +220,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    TSRecent *recent = [TSRecent sharedRecent];
+    [recent load];
+    
     NSString *query;
     if (indexPath.section == 0) {
         query = [self.locationResults objectForKey:@"l"];
@@ -222,12 +230,18 @@
         if ([[query substringToIndex:3] compare:@"/q/"]==NSOrderedSame) {
             query = [query substringFromIndex:3];
         }
+        NSString *name = [self nameForLocation];
+        [recent addEntryWithName:name type:@"location" query:query];
     } else if (indexPath.section == 1) {
         NSDictionary *d = [self.airportResults objectAtIndex:indexPath.row];
         query = [d objectForKey:@"icao"];
+        NSString *name = [self nameForAirport:d];
+        [recent addEntryWithName:name type:@"airport" query:query];
     } else if (indexPath.section == 2) {
         NSDictionary *d = [self.pwsResults objectAtIndex:indexPath.row];
         query = [NSString stringWithFormat:@"pws:%@", [d objectForKey:@"id"]];
+        NSString *name = [self nameForPws:d];
+        [recent addEntryWithName:name type:@"pws" query:query];
     } else {
         // Unknown section?
         return;
@@ -235,8 +249,9 @@
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     [settings setObject:query forKey:@"wundergroundQuery"];
     [settings synchronize];
-    // XXX Add to recents if it is not already there.
-    [self.service spawnTaskNow];
+    
+    TSWeatherService *service = [TSWeatherService sharedWeatherService];
+    [service spawnTaskNow];
     [self.navigationController dismissViewControllerAnimated:YES completion:NULL];
     // Navigation logic may go here. Create and push another view controller.
     /*

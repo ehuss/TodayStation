@@ -10,4 +10,6 @@
 
 @interface TSTimeUnitController : UITableViewController
 
+@property (nonatomic, strong) NSIndexPath *checkedItem;
+
 @end

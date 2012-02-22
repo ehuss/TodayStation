@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TSTempUnits : UITableViewController
+@interface TSTempUnitController : UITableViewController
+
+@property (nonatomic, strong) NSIndexPath *checkedItem;
 
 @end
