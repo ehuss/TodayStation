@@ -11,6 +11,7 @@
 #import "TSUtil.h"
 #import "TSLabel.h"
 #import "TSSettings.h"
+#import "TSColors.h"
 
 const static NSUInteger dateFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
 const static NSUInteger dateTimeFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
@@ -88,6 +89,7 @@ const static CGRect itemRect = { .origin.x = 10,
     
     TSLabel *view = createLabel(itemRect, YES);
     view.text = [NSString stringWithFormat:@"%@%@", datePrefix,dateText];
+    view.textColor = [TSColors theCurrentColor].deemphasizedColor;
     return view;
 }
 
@@ -196,6 +198,7 @@ const static CGRect itemRect = { .origin.x = 10,
     if (self.events == nil) {
         TSLabel *noView = createLabel(itemRect, YES);
         noView.text = @"No Calendar Events";
+        noView.textColor = [TSColors theCurrentColor].deemphasizedColor;
         [self.calendarView addSubview:noView];        
     }
     NSDate *currentDay = nil;

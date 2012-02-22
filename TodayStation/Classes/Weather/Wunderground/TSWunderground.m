@@ -18,6 +18,12 @@
 
 NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/";
 
+typedef enum {
+    TSIconLarge,
+    TSIconMedium,
+    TSIconSmall,
+} TSIconSize;
+
 @implementation TSWunderground
 
 @synthesize data=_data;
@@ -27,6 +33,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 @synthesize autocompleteOp=_autocompleteOp;
 @synthesize autocompleteTimer=_autocompleteTimer;
 @synthesize lastAutocomplete=_lastAutocomplete;
+@synthesize isDaylight=_isDaylight;
 
 - (TSWundergroundController *)controller
 {
@@ -40,6 +47,34 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
         }
     }
     return _controller;
+}
+
+- (void)computeIsDaylight
+{
+    NSDictionary *astronomy = [self.data objectForKey:@"moon_phase"];
+    if (astronomy != nil) {
+        NSDictionary *sunriseD = [astronomy objectForKey:@"sunrise"];
+        NSDictionary *sunsetD = [astronomy objectForKey:@"sunset"];
+        NSInteger sunriseHour = [[sunriseD objectForKey:@"hour"] intValue];
+        NSInteger sunriseMin = [[sunriseD objectForKey:@"minute"] intValue];
+        NSInteger sunsetHour = [[sunsetD objectForKey:@"hour"] intValue];
+        NSInteger sunsetMin = [[sunsetD objectForKey:@"minute"] intValue];
+
+        NSCalendar *gregorian = [[NSCalendar alloc]
+                                 initWithCalendarIdentifier:NSGregorianCalendar];
+        NSDateComponents *components = [gregorian components:NSHourCalendarUnit|NSMinuteCalendarUnit
+                                                    fromDate:[NSDate date]];
+        NSInteger currentHour = components.hour;
+        NSInteger currentMin = components.minute;
+        if ( ((currentHour==sunriseHour && currentMin>=sunriseMin) ||
+              (currentHour>sunriseHour)) &&
+            ((currentHour==sunsetHour && currentMin<=sunsetMin) ||
+             (currentHour<sunsetHour))) {
+            self.isDaylight = YES;
+        } else {
+            self.isDaylight = NO;
+        }
+    }
 }
 
 - (void)fetchData:(NSString *)query
@@ -74,6 +109,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     SBJsonParser *parser = [[SBJsonParser alloc] init];
     // XXX Error handling.
     self.data = [parser objectWithData:jsonData]; //] error:&error];
+    [self computeIsDaylight];
     
     //NSLog(@"%@", [self.data description]);
     
@@ -133,6 +169,43 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     return result;    
 }
 
+- (UIImage *)loadIcon:(NSString *)what withSize:(TSIconSize)size dayOnly:(BOOL)dayOnly
+{
+    NSString *sizeStr;
+    if (size == TSIconLarge) {
+        sizeStr = @"large";
+    } else if (size == TSIconMedium) {
+        sizeStr = @"medium";
+    } else if (size == TSIconSmall) {
+        sizeStr = @"small";
+    }
+    NSString *ndStr;
+    if (dayOnly || self.isDaylight) {
+        ndStr = @"day";
+    } else {
+        ndStr = @"night";
+    }
+    NSString *name = [NSString stringWithFormat:@"Images/Weather/%@-%@-%@",
+                      what,
+                      ndStr,
+                      sizeStr];
+    UIImage *result = [UIImage imageNamed:name];
+    if (result == nil) {
+        name = [NSString stringWithFormat:@"Images/Weather/%@-%@",
+                what,
+                sizeStr];
+        result = [UIImage imageNamed:name];
+    }
+    if (result == nil) {
+        NSLog(@"Couldn't find icon for %@ %@", what, sizeStr);
+        name = [NSString stringWithFormat:@"Images/Weather/unknown-%@",
+                sizeStr];
+        result = [UIImage imageNamed:name];        
+    }
+    return result;
+}
+
+
 - (TSWundergroundForeCont *)getForecastDayCont
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard"
@@ -184,9 +257,14 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     }
     cont.rainView.text = [NSString stringWithFormat:@"%@%%",
                           [dayD objectForKey:@"pop"]];
-    /*
-     @property (weak, nonatomic) IBOutlet UIImageView *iconView;
-*/
+    // Icon
+    NSString *iconStr = [dayD objectForKey:@"icon"];
+    UIImage *icon = [self loadIcon:iconStr withSize:TSIconMedium dayOnly:YES];
+    if (icon) {
+        cont.iconView.image = icon;
+    } else {
+        cont.iconView.image = nil;
+    }
     return cont.dayView;
 }
 
@@ -255,16 +333,16 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 280, 511, 488)];
     view.userInteractionEnabled = NO;
     
-    for (int i=0; i<16; i++) {
+    /*for (int i=0; i<16; i++) {
         UIView *hourView = [self buildHourViewForHour:i];
         // Move into position.
         CGRect f = hourView.frame;
         hourView.frame = CGRectMake(f.origin.x, f.size.height*i,
                                     f.size.width, f.size.height);
         [view addSubview:hourView];
-    }
+    }*/
     for (int i=0; i<16; i++) {
-        UIView *hourView = [self buildHourViewForHour:i+16];
+        UIView *hourView = [self buildHourViewForHour:i];
         // Move into position.
         CGRect f = hourView.frame;
         hourView.frame = CGRectMake(250, f.size.height*i,
@@ -297,6 +375,7 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
 
     return view;
 }
+
 - (UIView *)buildCurrentView
 {
     // XXX: Protect against no data.
@@ -359,6 +438,15 @@ NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/"
         NSLog(@"wind_degrees unexpected type: %@ %@",
               [windDeg description], NSStringFromClass([windDeg class]));
         c.currentWindView.text = @"";
+    }
+    
+    // Icon
+    NSString *iconStr = [currentObs objectForKey:@"icon"];
+    UIImage *icon = [self loadIcon:iconStr withSize:TSIconLarge dayOnly:NO];
+    if (icon) {
+        c.currentImageView.image = icon;
+    } else {
+        c.currentImageView.image = nil;
     }
     
     // ======================================================================

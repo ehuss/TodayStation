@@ -30,6 +30,7 @@
 @property (atomic, strong) NSOperation *autocompleteOp;
 @property (nonatomic, strong) NSTimer *autocompleteTimer;
 @property (nonatomic, copy) NSString *lastAutocomplete;
+@property (nonatomic, assign) BOOL isDaylight;
 
 - (void)startAutocompletePollerOnDelegate:(NSObject <TSWundergroundAutoDelegate>*)delegate;
 - (void)stopAutocompletePoller;

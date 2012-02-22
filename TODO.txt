@@ -1,5 +1,4 @@
 - Display busy indicator while downloading.
-- wunderground: maybe display "observation_location"?
 - Calender date header: Right align the date portion, day portion is left-aligned.
 - Calender entries: left align time, right align title?
   - Or maybe just offset title to a consistent location (enough space for time).
