@@ -4,7 +4,6 @@
   - Or maybe just offset title to a consistent location (enough space for time).
 - Initial display is sneaking in surrogates from storyboard... (At least clock)
 - call pause code when leaving foreground
-- On return from background, update weather and calendar.
 - EKEventStoreChangedNotification does not have coalesce. :(
   Need to implement some kind of anti-jitter.
   Maybe: After receiving message...wait for a certain period of time, ignoring
@@ -14,12 +13,10 @@
   - Settings button.
   - Separator lines.
 - City selector: Add GPS button to auto search.
-- City selector: If no recents, auto focus on search.
-- City selector: "Recent" header.
-- City selector: Clicking on recent entry should not go to station selector.
 
 MAJOR:
 - Icons
 - What to do with space around hourly information (2 column sucks).
 - Error handling.
+- On return from background, update weather and calendar.
 

@@ -28,7 +28,7 @@
 - (void)viewDidLoad
 {
     self.searchResults = [NSArray array];
-    self.title = @"Select a City";
+    self.title = @"Select a Location";
 	self.tableView.scrollEnabled = YES;
     // XXX: Enable bounces zoom?
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
@@ -51,18 +51,10 @@
 
     self.recent = [TSRecent sharedRecent];
     [self.recent load];
-
     
     [self.tableView reloadData];
     [super viewDidLoad];
-    
-    // XXX: Call search controller set active if count==0.
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewDidUnload
@@ -117,6 +109,15 @@
     }
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+	if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return nil;
+    } else {
+        return @"Recent Locations";
+    }
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -168,16 +169,22 @@
 	 If the requesting table view is the search display controller's table view, configure the next view controller using the filtered content, otherwise use the main list.
 	 */
 
-    NSString *query;
 	if (tableView == self.searchDisplayController.searchResultsTableView) {
         NSDictionary *entry = [self.searchResults objectAtIndex:indexPath.row];
-        query = [NSString stringWithFormat:@"zmw:%@", [entry objectForKey:@"zmw"]];
+        NSString *query = [NSString stringWithFormat:@"zmw:%@", [entry objectForKey:@"zmw"]];
+        [self pushStationControllerWithQuery:query];
     } else {
         NSDictionary *entry = [[self.recent arrayForCurrentService] objectAtIndex:indexPath.row];
-        query = [entry objectForKey:@"id"];
+
+        NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+        [settings setObject:[entry objectForKey:@"id"] forKey:@"wundergroundQuery"];
+        [settings synchronize];
+        
+        TSWeatherService *service = [TSWeatherService sharedWeatherService];
+        [service spawnTaskNow];
+        [self.navigationController dismissViewControllerAnimated:YES completion:NULL];
     }
     
-    [self pushStationControllerWithQuery:query];
     
 }
 
@@ -221,5 +228,14 @@
     [self.searchCont.searchResultsTableView reloadData];
 }
 
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.recent.arrayForCurrentService removeObjectAtIndex:indexPath.row];
+        [self.recent save];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+    }
+}
 
 @end
