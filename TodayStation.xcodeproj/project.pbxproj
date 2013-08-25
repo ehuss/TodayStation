@@ -13,6 +13,9 @@
 		0752582714F079DC00881380 /* TSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0752582614F079DB00881380 /* TSLabel.m */; };
 		0752582A14F08A4700881380 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 0752582914F08A4700881380 /* NSNotificationCenter+MainThread.m */; };
 		0752582D14F08B2E00881380 /* TSBackgroundService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0752582C14F08B2D00881380 /* TSBackgroundService.m */; };
+		075502C114F5CB4600F463C9 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 075502BE14F5CB4600F463C9 /* Icon-72.png */; };
+		075502C214F5CB4600F463C9 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 075502BF14F5CB4600F463C9 /* Icon-Small-50.png */; };
+		075502C314F5CB4600F463C9 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 075502C014F5CB4600F463C9 /* iTunesArtwork */; };
 		0764CB3A14EE287100559289 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0764CB3914EE287100559289 /* UIKit.framework */; };
 		0764CB3C14EE287100559289 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0764CB3B14EE287100559289 /* Foundation.framework */; };
 		0764CB3E14EE287100559289 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0764CB3D14EE287100559289 /* CoreGraphics.framework */; };
@@ -109,6 +112,9 @@
 		0752582914F08A4700881380 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
 		0752582B14F08B2D00881380 /* TSBackgroundService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSBackgroundService.h; sourceTree = "<group>"; };
 		0752582C14F08B2D00881380 /* TSBackgroundService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSBackgroundService.m; sourceTree = "<group>"; };
+		075502BE14F5CB4600F463C9 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "TodayStation/Icon-72.png"; sourceTree = "<group>"; };
+		075502BF14F5CB4600F463C9 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small-50.png"; path = "TodayStation/Icon-Small-50.png"; sourceTree = "<group>"; };
+		075502C014F5CB4600F463C9 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = TodayStation/iTunesArtwork; sourceTree = "<group>"; };
 		0764CB3514EE287100559289 /* TodayStation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodayStation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0764CB3914EE287100559289 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		0764CB3B14EE287100559289 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -238,6 +244,9 @@
 		0764CB2A14EE287000559289 = {
 			isa = PBXGroup;
 			children = (
+				075502BE14F5CB4600F463C9 /* Icon-72.png */,
+				075502BF14F5CB4600F463C9 /* Icon-Small-50.png */,
+				075502C014F5CB4600F463C9 /* iTunesArtwork */,
 				0764CBF414EF56B700559289 /* TODO.txt */,
 				0764CB7114EE28CF00559289 /* SBJson.xcodeproj */,
 				0764CB3F14EE287100559289 /* TodayStation */,
@@ -434,7 +443,7 @@
 		0764CB2C14EE287000559289 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 0764CB2F14EE287000559289 /* Build configuration list for PBXProject "TodayStation" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -499,6 +508,9 @@
 				0764CB4414EE287100559289 /* InfoPlist.strings in Resources */,
 				0764CB9914EE2BE900559289 /* MainStoryboard.storyboard in Resources */,
 				07D56A3014F3991500732CF3 /* Images in Resources */,
+				075502C114F5CB4600F463C9 /* Icon-72.png in Resources */,
+				075502C214F5CB4600F463C9 /* Icon-Small-50.png in Resources */,
+				075502C314F5CB4600F463C9 /* iTunesArtwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,6 +626,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -627,6 +643,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
@@ -640,12 +657,17 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";

@@ -13,10 +13,9 @@
   - Settings button.
   - Separator lines.
 - City selector: Add GPS button to auto search.
+- Default.png launch image
 
 MAJOR:
-- Icons
 - What to do with space around hourly information (2 column sucks).
 - Error handling.
 - On return from background, update weather and calendar.
-

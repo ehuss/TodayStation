@@ -495,16 +495,48 @@ typedef enum {
         // Just manually format based on our guess for 12/24 hour clock.
         c.sunriseView.text = [self timeAmPmWithHour:sunriseHour minute:sunriseMin];
         c.sunsetView.text = [self timeAmPmWithHour:sunsetHour minute:sunsetMin];
+        
+        NSInteger percent = [[astronomy objectForKey:@"percentIlluminated"] intValue];
+        NSInteger age = [[astronomy objectForKey:@"ageOfMoon"] intValue];
+        NSLog(@"Moon %%=%i age=%i", percent, age);
+        // This is not entirely correct, just a rough estimate.
+        // This does not take hemisphere into account.
+        NSString *name;
+        if (percent == 0) {
+            name = @"moon0";
+        } else if (percent == 100) {
+            name = @"moon100";
+        } else if (age < 17 && (percent > 0 && percent < 49)) {
+            // Waxing Crescent
+            name = @"moon25Wax";
+        } else if (age < 17 && (percent >=49 && percent <=51)) {
+            // First Quarter
+            name = @"moon50Wax";
+        } else if (age < 17 && (percent >51 && percent <=99)) {
+            // Waxing Gibbous
+            name = @"moon75Wax";
+        } else if (age > 15 && (percent >51 && percent <=99)) {
+            // Waning Gibbous
+            name = @"moon75Wane";
+        } else if (age > 15 && (percent >=49 && percent <=51)) {
+            // Third quarter
+            name = @"moon50Wane";
+        } else if (age > 15 && (percent > 0 && percent < 49)) {
+            // Waning Crescent
+            name = @"moon25Wane";
+        } else {
+            name = nil;
+        }
+        NSString *fullName = [NSString stringWithFormat:@"Images/Moon/%@",
+                              name];
+        c.moonPhaseView.image = [UIImage imageNamed:fullName];
+        
     } else {
         // XXX: fatal error
         c.sunriseView.text = @"";
         c.sunsetView.text = @"";
     }
     
-    // XXX
-    //c.currentImageView.x = ;
-    //c.moonPhaseView.x = ;
-
     return c.currentView;
 }
 

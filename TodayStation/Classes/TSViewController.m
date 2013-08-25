@@ -91,6 +91,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    NSLog(@"view did appear");
     TSWeatherService *weatherService = [TSWeatherService sharedWeatherService];
     weatherService.delegate = self;
     [weatherService start];

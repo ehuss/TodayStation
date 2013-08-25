@@ -170,7 +170,7 @@
                                 <rect key="frame" x="512" y="219" width="512" height="235"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="PLy-EL-Zba" userLabel="Moon Phase View">
+                                    <imageView userInteractionEnabled="NO" contentMode="center" id="PLy-EL-Zba" userLabel="Moon Phase View">
                                         <rect key="frame" x="356" y="134" width="136" height="100"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -299,50 +299,6 @@
             <point key="canvasLocation" x="-272" y="815"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="TSViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="calendarView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="dateView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="periodView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="secondsView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="settingsButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="timeView" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="TSWeatherController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSWeatherController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="currentView" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="TSWundergroundController" superclassName="TSWeatherController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSWundergroundController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="currentImageView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="currentTempView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="currentView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="currentWindView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="hiTempView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="lowTempView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="moonPhaseView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="sunriseView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="sunsetView" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="TSWundergroundForeCont" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSWundergroundForeCont.h"/>
-            <relationships>
-                <relationship kind="outlet" name="dateView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="dayOfWeekView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="dayView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="hiLowView" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="iconView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="rainView" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation" orientation="landscapeRight"/>
