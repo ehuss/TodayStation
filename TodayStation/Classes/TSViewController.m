@@ -13,23 +13,6 @@
 
 @implementation TSViewController
 
-@synthesize secondsView=_secondsView;
-@synthesize dateView=_dateView;
-@synthesize periodView=_periodView;
-@synthesize calendarView = _calendarView;
-@synthesize settingsButton = _settingsButton;
-@synthesize currentView = _currentView;
-@synthesize timeView = _timeView;
-@synthesize secondsTimer=_secondsTimer;
-@synthesize calendar=_calendar;
-@synthesize tallView=_tallView;
-@synthesize foreView=_foreView;
-@synthesize location=_location;
-@synthesize busy=_busy;
-@synthesize selectCityCont=_selectCityCont;
-@synthesize selectCityNav=_selectCityNav;
-@synthesize settingsNav=_settingsNav;
-
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
@@ -91,7 +74,6 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    NSLog(@"view did appear");
     TSWeatherService *weatherService = [TSWeatherService sharedWeatherService];
     weatherService.delegate = self;
     [weatherService start];
@@ -204,15 +186,23 @@
 - (void)weatherReady
 {
     NSLog(@"Weather updated.");
-    [self.currentView removeFromSuperview];
-    [self.foreView removeFromSuperview];
-    [self.tallView removeFromSuperview];
+    if (self.currentView) {
+        [self.currentView removeFromSuperview];
+    }
+    if (self.foreView) {
+        [self.foreView removeFromSuperview];
+    }
+    if (self.tallView) {
+        [self.tallView removeFromSuperview];
+    }
 
     TSWeatherService *service = [TSWeatherService sharedWeatherService];
 
     self.currentView = [service buildCurrentView];
     self.foreView = [service buildForeView];
     self.tallView = [service buildTallView];
+
+    NSLog(@"foreview=%@ tallview=%@" ,self.foreView, self.tallView);
 
     [self.view addSubview:self.currentView];
     [self.view addSubview:self.foreView];

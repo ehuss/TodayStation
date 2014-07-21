@@ -12,7 +12,7 @@ TSTempUnit currentTempUnit(void)
 {
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     TSTempUnit currentUnit;
-    currentUnit = [settings integerForKey:@"tempUnit"];
+    currentUnit = (TSTempUnit) [settings integerForKey:@"tempUnit"];
     if (currentUnit == TSTempDefault) {
         BOOL isMetric = [[[NSLocale currentLocale] objectForKey:NSLocaleUsesMetricSystem] boolValue];
         if (isMetric) {
@@ -43,7 +43,7 @@ TSTimeUnit currentTimeUnit(void)
 {
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     TSTimeUnit currentUnit;
-    currentUnit = [settings integerForKey:@"timeUnit"];
+    currentUnit = (TSTimeUnit) [settings integerForKey:@"timeUnit"];
     if (currentUnit == TSTimeDefault) {
         if (is24h) {
             return TSTime24Hour;

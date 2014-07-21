@@ -108,7 +108,7 @@
         cell.textLabel.text = @"12-Hour";
     }
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    TSTimeUnit currentTime = [settings integerForKey:@"timeUnit"];
+    TSTimeUnit currentTime = (TSTimeUnit) [settings integerForKey:@"timeUnit"];
     if (indexPath.row == currentTime) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.checkedItem = indexPath;

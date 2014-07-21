@@ -34,8 +34,8 @@
     [cache loadPlist];
     NSMutableDictionary *plist = cache.plist;
     NSMutableDictionary *caches = [plist objectForKey:@"TSCaches"];
-    STAssertNotNil(caches, @"Caches was nil.");
-    STAssertEquals([caches count], 0U, @"len(caches)!=0");
+    XCTAssertNotNil(caches, @"Caches was nil.");
+    XCTAssertEqual([caches count], 0U, @"len(caches)!=0");
 }
 
 - (void)testEncache
@@ -47,32 +47,32 @@
 
     // Test fetch.
     data = [cache getForName:@"test1" withMatch:@"1234"];
-    STAssertNotNil(data, @"Couldn't fetch");
+    XCTAssertNotNil(data, @"Couldn't fetch");
     const void *bytes = [data bytes];
-    STAssertEquals(memcmp(bytes, "TEST", 4) , 0, @"Data didn't match");
+    XCTAssertEqual(memcmp(bytes, "TEST", 4) , 0, @"Data didn't match");
 
     // Verify plist.
     NSMutableDictionary *plist = cache.plist;
     NSMutableDictionary *caches = [plist objectForKey:@"TSCaches"];
-    STAssertNotNil(caches, @"Caches was nil.");
-    STAssertEquals([caches count], 1U, @"len(caches)!=1");
+    XCTAssertNotNil(caches, @"Caches was nil.");
+    XCTAssertEqual([caches count], 1U, @"len(caches)!=1");
     // Verify 1 file in dir.
     NSFileManager *manager = [NSFileManager defaultManager];
     NSError *error;
     NSArray *files = [manager contentsOfDirectoryAtURL:cache.cacheDir includingPropertiesForKeys:[NSArray array] options:0 error:&error];
-    STAssertEquals([files count], 2U, @"Len(files)!=1");
+    XCTAssertEqual([files count], 2U, @"Len(files)!=1");
     
     // Test for expiration.
     sleep(5);
     data = [cache getForName:@"test1" withMatch:@"1234"];
-    STAssertNil(data, @"Cache didn't expire.");
+    XCTAssertNil(data, @"Cache didn't expire.");
     // Make sure it cleaned up.
     plist = cache.plist;
     caches = [plist objectForKey:@"TSCaches"];
-    STAssertNotNil(caches, @"Caches was nil.");
-    STAssertEquals([caches count], 0U, @"len(caches)!=0");
+    XCTAssertNotNil(caches, @"Caches was nil.");
+    XCTAssertEqual([caches count], 0U, @"len(caches)!=0");
     files = [manager contentsOfDirectoryAtURL:cache.cacheDir includingPropertiesForKeys:[NSArray array] options:0 error:&error];
-    STAssertEquals([files count], 1U, @"Len(files)!=1");
+    XCTAssertEqual([files count], 1U, @"Len(files)!=1");
 }
 
 - (void)testMatch
@@ -84,13 +84,13 @@
     
     // Check good match.
     data = [cache getForName:@"test1" withMatch:@"1234"];
-    STAssertNotNil(data, @"Couldn't fetch");
+    XCTAssertNotNil(data, @"Couldn't fetch");
     const void *bytes = [data bytes];
-    STAssertEquals(memcmp(bytes, "TEST2", 5) , 0, @"Data didn't match");
+    XCTAssertEqual(memcmp(bytes, "TEST2", 5) , 0, @"Data didn't match");
 
     // Check bad match.
     data = [cache getForName:@"test1" withMatch:@"12345"];
-    STAssertNil(data, @"Didn't clear");
+    XCTAssertNil(data, @"Didn't clear");
 }
 
 

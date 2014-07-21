@@ -23,12 +23,10 @@
 		0764CB4614EE287100559289 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0764CB4514EE287100559289 /* main.m */; };
 		0764CB4A14EE287100559289 /* TSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0764CB4914EE287100559289 /* TSAppDelegate.m */; };
 		0764CB5014EE287100559289 /* TSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0764CB4F14EE287100559289 /* TSViewController.m */; };
-		0764CB5814EE287100559289 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0764CB5714EE287100559289 /* SenTestingKit.framework */; };
 		0764CB5914EE287100559289 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0764CB3914EE287100559289 /* UIKit.framework */; };
 		0764CB5A14EE287100559289 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0764CB3B14EE287100559289 /* Foundation.framework */; };
 		0764CB6214EE287100559289 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0764CB6014EE287100559289 /* InfoPlist.strings */; };
 		0764CB6514EE287100559289 /* TodayStationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0764CB6414EE287100559289 /* TodayStationTests.m */; };
-		0764CB8314EE28F000559289 /* libsbjson-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0764CB8014EE28CF00559289 /* libsbjson-ios.a */; };
 		0764CB8814EE299000559289 /* TSCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0764CB8714EE299000559289 /* TSCache.m */; };
 		0764CB8B14EE2A3E00559289 /* TSWeatherController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0764CB8A14EE2A3E00559289 /* TSWeatherController.m */; };
 		0764CB8E14EE2A8200559289 /* TSWeatherIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 0764CB8D14EE2A8200559289 /* TSWeatherIcons.m */; };
@@ -64,41 +62,6 @@
 			remoteGlobalIDString = 0764CB3414EE287100559289;
 			remoteInfo = TodayStation;
 		};
-		0764CB7B14EE28CF00559289 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0764CB7114EE28CF00559289 /* SBJson.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BC12323D1391D5CC00131607;
-			remoteInfo = SBJson;
-		};
-		0764CB7D14EE28CF00559289 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0764CB7114EE28CF00559289 /* SBJson.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BC1232521391D5CC00131607;
-			remoteInfo = SBJsonTests;
-		};
-		0764CB7F14EE28CF00559289 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0764CB7114EE28CF00559289 /* SBJson.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BCC2626913920FC7003D9994;
-			remoteInfo = "sbjson-ios";
-		};
-		0764CB8114EE28CF00559289 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0764CB7114EE28CF00559289 /* SBJson.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BCC2627313920FC7003D9994;
-			remoteInfo = "sbjson-iosTests";
-		};
-		0764CB8414EE291300559289 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0764CB7114EE28CF00559289 /* SBJson.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BCC2626813920FC7003D9994;
-			remoteInfo = "sbjson-ios";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -127,13 +90,11 @@
 		0764CB4914EE287100559289 /* TSAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSAppDelegate.m; sourceTree = "<group>"; };
 		0764CB4E14EE287100559289 /* TSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TSViewController.h; sourceTree = "<group>"; };
 		0764CB4F14EE287100559289 /* TSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSViewController.m; sourceTree = "<group>"; };
-		0764CB5614EE287100559289 /* TodayStationTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodayStationTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0764CB5714EE287100559289 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		0764CB5614EE287100559289 /* TodayStationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodayStationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0764CB5F14EE287100559289 /* TodayStationTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TodayStationTests-Info.plist"; sourceTree = "<group>"; };
 		0764CB6114EE287100559289 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0764CB6314EE287100559289 /* TodayStationTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayStationTests.h; sourceTree = "<group>"; };
 		0764CB6414EE287100559289 /* TodayStationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayStationTests.m; sourceTree = "<group>"; };
-		0764CB7114EE28CF00559289 /* SBJson.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SBJson.xcodeproj; path = SBJson_3.1alpha3/SBJson.xcodeproj; sourceTree = "<group>"; };
 		0764CB8614EE299000559289 /* TSCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCache.h; sourceTree = "<group>"; };
 		0764CB8714EE299000559289 /* TSCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCache.m; sourceTree = "<group>"; };
 		0764CB8914EE2A3E00559289 /* TSWeatherController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSWeatherController.h; sourceTree = "<group>"; };
@@ -192,7 +153,6 @@
 				07E4C1CC14F0C09D009A6AC1 /* CoreLocation.framework in Frameworks */,
 				0752582414F0774B00881380 /* QuartzCore.framework in Frameworks */,
 				0752582214F05DE400881380 /* EventKit.framework in Frameworks */,
-				0764CB8314EE28F000559289 /* libsbjson-ios.a in Frameworks */,
 				0764CB3A14EE287100559289 /* UIKit.framework in Frameworks */,
 				0764CB3C14EE287100559289 /* Foundation.framework in Frameworks */,
 				0764CB3E14EE287100559289 /* CoreGraphics.framework in Frameworks */,
@@ -203,7 +163,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0764CB5814EE287100559289 /* SenTestingKit.framework in Frameworks */,
 				0764CB5914EE287100559289 /* UIKit.framework in Frameworks */,
 				0764CB5A14EE287100559289 /* Foundation.framework in Frameworks */,
 			);
@@ -248,7 +207,6 @@
 				075502BF14F5CB4600F463C9 /* Icon-Small-50.png */,
 				075502C014F5CB4600F463C9 /* iTunesArtwork */,
 				0764CBF414EF56B700559289 /* TODO.txt */,
-				0764CB7114EE28CF00559289 /* SBJson.xcodeproj */,
 				0764CB3F14EE287100559289 /* TodayStation */,
 				0764CB5D14EE287100559289 /* TodayStationTests */,
 				0764CB3814EE287100559289 /* Frameworks */,
@@ -260,7 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				0764CB3514EE287100559289 /* TodayStation.app */,
-				0764CB5614EE287100559289 /* TodayStationTests.octest */,
+				0764CB5614EE287100559289 /* TodayStationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -274,7 +232,6 @@
 				0764CB3914EE287100559289 /* UIKit.framework */,
 				0764CB3B14EE287100559289 /* Foundation.framework */,
 				0764CB3D14EE287100559289 /* CoreGraphics.framework */,
-				0764CB5714EE287100559289 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -320,17 +277,6 @@
 				0764CB6014EE287100559289 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		0764CB7214EE28CF00559289 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				0764CB7C14EE28CF00559289 /* SBJson.framework */,
-				0764CB7E14EE28CF00559289 /* SBJsonTests.octest */,
-				0764CB8014EE28CF00559289 /* libsbjson-ios.a */,
-				0764CB8214EE28CF00559289 /* sbjson-iosTests.octest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		07D56A4114F47C2A00732CF3 /* Settings */ = {
@@ -411,7 +357,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				0764CB8514EE291300559289 /* PBXTargetDependency */,
 			);
 			name = TodayStation;
 			productName = TodayStation;
@@ -434,8 +379,8 @@
 			);
 			name = TodayStationTests;
 			productName = TodayStationTests;
-			productReference = 0764CB5614EE287100559289 /* TodayStationTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 0764CB5614EE287100559289 /* TodayStationTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -443,7 +388,8 @@
 		0764CB2C14EE287000559289 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastTestingUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 			};
 			buildConfigurationList = 0764CB2F14EE287000559289 /* Build configuration list for PBXProject "TodayStation" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -455,12 +401,6 @@
 			mainGroup = 0764CB2A14EE287000559289;
 			productRefGroup = 0764CB3614EE287100559289 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 0764CB7214EE28CF00559289 /* Products */;
-					ProjectRef = 0764CB7114EE28CF00559289 /* SBJson.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				0764CB3414EE287100559289 /* TodayStation */,
@@ -468,37 +408,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		0764CB7C14EE28CF00559289 /* SBJson.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SBJson.framework;
-			remoteRef = 0764CB7B14EE28CF00559289 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0764CB7E14EE28CF00559289 /* SBJsonTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SBJsonTests.octest;
-			remoteRef = 0764CB7D14EE28CF00559289 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0764CB8014EE28CF00559289 /* libsbjson-ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libsbjson-ios.a";
-			remoteRef = 0764CB7F14EE28CF00559289 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0764CB8214EE28CF00559289 /* sbjson-iosTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "sbjson-iosTests.octest";
-			remoteRef = 0764CB8114EE28CF00559289 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		0764CB3314EE287100559289 /* Resources */ = {
@@ -593,11 +502,6 @@
 			target = 0764CB3414EE287100559289 /* TodayStation */;
 			targetProxy = 0764CB5B14EE287100559289 /* PBXContainerItemProxy */;
 		};
-		0764CB8514EE291300559289 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "sbjson-ios";
-			targetProxy = 0764CB8414EE291300559289 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -624,14 +528,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -641,11 +548,15 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -655,19 +566,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -707,14 +624,13 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TodayStation.app/TodayStation";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TodayStation/TodayStation-Prefix.pch";
 				INFOPLIST_FILE = "TodayStationTests/TodayStationTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -724,14 +640,13 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TodayStation.app/TodayStation";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TodayStation/TodayStation-Prefix.pch";
 				INFOPLIST_FILE = "TodayStationTests/TodayStationTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

@@ -18,22 +18,22 @@
                                                 TSWeatherDelegate,
                                                 TSCalendarDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *timeView;
-@property (weak, nonatomic) IBOutlet UILabel *dateView;
-@property (weak, nonatomic) IBOutlet UILabel *secondsView;
-@property (weak, nonatomic) IBOutlet UILabel *periodView;
-@property (weak, nonatomic) IBOutlet UIView *calendarView;
-@property (weak, nonatomic) IBOutlet UIButton *settingsButton;
-@property (strong, nonatomic) TSCalendar *calendar;
-@property (nonatomic, strong) NSTimer *secondsTimer;
-@property (weak, nonatomic) UIView *currentView;
-@property (nonatomic, weak) UIView *tallView;
-@property (nonatomic, weak) UIView *foreView;
-@property (nonatomic, strong) TSLocation *location;
-@property (nonatomic, strong) TSBusy *busy;
-@property (nonatomic, strong) TSSelectCityController *selectCityCont;
-@property (nonatomic, strong) UINavigationController *selectCityNav;
-@property (nonatomic, strong) UINavigationController *settingsNav;
+@property (nonatomic) IBOutlet UILabel *timeView;
+@property (nonatomic) IBOutlet UILabel *dateView;
+@property (nonatomic) IBOutlet UILabel *secondsView;
+@property (nonatomic) IBOutlet UILabel *periodView;
+@property (nonatomic) IBOutlet UIView *calendarView;
+@property (nonatomic) IBOutlet UIButton *settingsButton;
+@property (nonatomic) TSCalendar *calendar;
+@property (nonatomic) NSTimer *secondsTimer;
+@property (nonatomic) UIView *currentView;
+@property (nonatomic) UIView *tallView;
+@property (nonatomic) UIView *foreView;
+@property (nonatomic) TSLocation *location;
+@property (nonatomic) TSBusy *busy;
+@property (nonatomic) TSSelectCityController *selectCityCont;
+@property (nonatomic) UINavigationController *selectCityNav;
+@property (nonatomic) UINavigationController *settingsNav;
 - (void)secondsTick:(NSTimer *)timer;
 - (void)updateTime;
 

@@ -29,6 +29,7 @@
 {
     [self.delegate performSelectorOnMainThread:sel
                                     withObject:data waitUntilDone:NO];
+    
 }   
 
 - (void)startOperation

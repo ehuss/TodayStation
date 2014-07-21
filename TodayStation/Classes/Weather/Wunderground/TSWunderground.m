@@ -7,8 +7,6 @@
 //
 
 #import "TSWunderground.h"
-#import "SBJson.h"
-#import "TSCache.h"
 #import "NSDictionary+TSUtil.h"
 #import "TSUtil.h"
 #import "TSWundergroundForeCont.h"
@@ -79,48 +77,15 @@ typedef enum {
 
 - (void)fetchData:(NSString *)query
 {
-    TSCache *cache = [TSCache sharedCache];
-    // XXX: Match should be location.
-    NSData *jsonData = [cache getForName:@"wunderground" withMatch:query];
-    if (jsonData == nil) {
-        NSString *urlStr = [NSString stringWithFormat:@"%@conditions/forecast/astronomy/hourly/q/%@.json",
-                            wundergroundURL,
-                            query];
-        NSURL *url = [NSURL URLWithString:urlStr];
-        NSLog(@"Fetching wunderground: %@", url);
-        // XXX STREAM
-        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-        //    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-        NSURLResponse *response;
-        NSError *error;
-        jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-        if (jsonData == nil) {
-            // XXX Error.
-            return;
-        }
-        // XXX: Error checking.
-        //    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];        
-        // XXX: Only encache if it parses correctly.
-        [cache encacheData:jsonData name:@"wunderground" mustMatch:query forTime:600];
-    } else {
-        NSLog(@"Fetched wunderground from cache.");
+    NSString *urlStr = [NSString stringWithFormat:@"%@conditions/forecast/astronomy/hourly/q/%@.json",
+                        wundergroundURL,
+                        query];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    self.data = [self fetchJSON:url];
+    if (self.data == nil) {
+        return;
     }
-    
-    SBJsonParser *parser = [[SBJsonParser alloc] init];
-    // XXX Error handling.
-    self.data = [parser objectWithData:jsonData]; //] error:&error];
     [self computeIsDaylight];
-    
-    //NSLog(@"%@", [self.data description]);
-    
-    /*null -> NSNull
-     string -> NSString
-     array -> NSMutableArray
-     object -> NSMutableDictionary
-     true -> NSNumber's -numberWithBool:YES
-     false -> NSNumber's -numberWithBool:NO
-     integer up to 19 digits -> NSNumber's -numberWithLongLong:
-     all other numbers -> NSDecimalNumber*/
 }
 
 - (void)doTask
@@ -233,8 +198,16 @@ typedef enum {
         NSLog(@"Couldn't find forecastday");
         return nil;
     }
+    if (days.count <= dayNum) {
+        NSLog(@"Not enough days in simple forecast.");
+        return nil;
+    }
     NSDictionary *dayD = [days objectAtIndex:dayNum];
     NSNumber *epoch = [dayD tsObjectForKeyPath:@"date.epoch" numberToString:NO];
+    if (epoch == nil) {
+        NSLog(@"Unable to find date.epoch.");
+        return nil;
+    }
     NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:[epoch intValue]];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setLocale:[NSLocale currentLocale]];
@@ -246,6 +219,10 @@ typedef enum {
     cont.dateView.text = [formatter stringFromDate:date];
     NSDictionary *high = [dayD objectForKey:@"high"];
     NSDictionary *low = [dayD objectForKey:@"low"];
+    if (high == nil || low == nil) {
+        NSLog(@"Unable to find forecast high/low.");
+        return nil;
+    }
     if (tempUnit == TSTempCelsius) {
         cont.hiLowView.text = [NSString stringWithFormat:@"%@\xc2\xb0/%@\xc2\xb0",
                                [high objectForKey:@"celsius"],
@@ -259,10 +236,15 @@ typedef enum {
                           [dayD objectForKey:@"pop"]];
     // Icon
     NSString *iconStr = [dayD objectForKey:@"icon"];
+    if (iconStr == nil) {
+        NSLog(@"No icon in forecast?");
+        return nil;
+    }
     UIImage *icon = [self loadIcon:iconStr withSize:TSIconMedium dayOnly:YES];
     if (icon) {
         cont.iconView.image = icon;
     } else {
+        NSLog(@"Missing icon for %@", iconStr);
         cont.iconView.image = nil;
     }
     return cont.dayView;
@@ -287,11 +269,23 @@ typedef enum {
         NSLog(@"Couldn't find hourly_forecast");
         return nil;
     }
+    if (hours.count <= hour) {
+        NSLog(@"Not enough hours in hourly forecast.");
+        return nil;
+    }
     NSDictionary *hourD = [hours objectAtIndex:hour];
     NSNumber *hourN = [hourD tsObjectForKeyPath:@"FCTTIME.hour" numberToString:NO];
+    if (hourN == nil) {
+        NSLog(@"Couldn't find FCTTIME.hour");
+        return nil;
+    }
     UILabel *timeLabel = [self createHourLabel:CGRectMake(0, 0, 74, 27)];
     timeLabel.text = [self timeAmPmWithHour:[hourN intValue] minute:-1];
     NSDictionary *tempD = [hourD objectForKey:@"temp"];
+    if (tempD == nil) {
+        NSLog(@"Unable to find temp in hourly forecast.");
+        return nil;
+    }
     UILabel *tempLabel = [self createHourLabel:CGRectMake(82, 0, 57, 27)];
     if (tempUnit == TSTempCelsius) {
         tempLabel.text = [NSString stringWithFormat:@"%@\xc2\xb0",
@@ -317,11 +311,13 @@ typedef enum {
     // XXX assuming 4 days with first being today.
     for (int i=0; i<3; i++) {
         UIView *dayView = [self buildDayViewForDay:i+1];
-        // Move into position.
-        CGRect f = dayView.frame;
-        dayView.frame = CGRectMake(f.origin.x, f.size.height*i,
-                                   f.size.width, f.size.height);
-        [view addSubview:dayView];
+        if (dayView) {
+            // Move into position.
+            CGRect f = dayView.frame;
+            dayView.frame = CGRectMake(f.origin.x, f.size.height*i,
+                                       f.size.width, f.size.height);
+            [view addSubview:dayView];
+        }
     }
     
     return view;
@@ -343,11 +339,13 @@ typedef enum {
     }*/
     for (int i=0; i<16; i++) {
         UIView *hourView = [self buildHourViewForHour:i];
-        // Move into position.
-        CGRect f = hourView.frame;
-        hourView.frame = CGRectMake(250, f.size.height*i,
-                                    f.size.width, f.size.height);
-        [view addSubview:hourView];
+        if (hourView) {
+            // Move into position.
+            CGRect f = hourView.frame;
+            hourView.frame = CGRectMake(250, f.size.height*i,
+                                        f.size.width, f.size.height);
+            [view addSubview:hourView];
+        }
     }
     
     UILabel *lastUpdateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -373,6 +371,7 @@ typedef enum {
                                        locatF.size.width, locatF.size.height);
     [view addSubview:locationLabel];
 
+    NSLog(@"Returning view %@", view);
     return view;
 }
 
@@ -546,23 +545,7 @@ typedef enum {
                         wundergroundURL,
                         [query stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ];
     NSURL *url = [NSURL URLWithString:urlStr];
-    NSLog(@"Fetching wunderground: %@", url);
-    // XXX STREAM
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    //    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    NSURLResponse *response;
-    NSError *error;
-    NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (jsonData == nil) {
-        // XXX Error.
-        return;
-    }
-    // XXX: Error checking.
-    //    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];        
-
-    SBJsonParser *parser = [[SBJsonParser alloc] init];
-    // XXX Error handling.
-    self.geoData = [parser objectWithData:jsonData]; //] error:&error];
+    self.geoData = [self fetchJSON:url];
 }
 
 - (void)startAutocompletePollerOnDelegate:(NSObject <TSWundergroundAutoDelegate>*)delegate
@@ -609,25 +592,41 @@ typedef enum {
     }
     NSString *escaped = [self.lastAutocomplete stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *urlStr = [NSString stringWithFormat:@"http://autocomplete.wunderground.com/aq?query=%@&format=JSON", escaped];
-    NSLog(@"Wunderground autocomplete: %@", urlStr);
     NSURL *url = [NSURL URLWithString:urlStr];
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    NSURLResponse *response;
-    NSError *error;
-    NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (jsonData == nil) {
-        // XXX: Error handling.
-        [self signalAutocompleteWithResults:[NSArray array]];
-        return;
-    }
+    NSDictionary *resultsD = [self fetchJSON:url];
     if ([self.autocompleteOp isCancelled]) {
         return;
     }
-    SBJsonParser *parser = [[SBJsonParser alloc] init];
-    NSDictionary *resultsD = [parser objectWithData:jsonData];
-    // XXX: Error handling.
+    if (resultsD == nil) {
+        [self signalAutocompleteWithResults:[NSArray array]];
+        return;
+    }
     NSArray *results = [resultsD objectForKey:@"RESULTS"];
     [self signalAutocompleteWithResults:results];
+}
+
+- (NSDictionary *)fetchJSON:(NSURL *)url
+{
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    NSURLResponse *response;
+    NSError *error;
+    NSLog(@"Fetching URL %@", url);
+    NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    if (jsonData == nil) {
+        NSLog(@"Connection error (URL %@): %@", url, [error localizedDescription]);
+        return nil;
+    }
+    id data;
+    data = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+    if (data == nil) {
+        NSLog(@"Failed to parse json data: %@", [error localizedDescription]);
+        return nil;
+    }
+    if (![data isKindOfClass:[NSDictionary class]]) {
+        NSLog(@"query data not a dictionary!?");
+        return nil;
+    }
+    return (NSDictionary *)data;
 }
 
 - (void)stopAutocompletePoller

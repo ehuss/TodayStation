@@ -108,7 +108,7 @@
         cell.textLabel.text = @"Fahrenheit";
     }
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    TSTempUnit currentTemp = [settings integerForKey:@"tempUnit"];
+    TSTempUnit currentTemp = (TSTempUnit) [settings integerForKey:@"tempUnit"];
     if (indexPath.row == currentTemp) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.checkedItem = indexPath;
