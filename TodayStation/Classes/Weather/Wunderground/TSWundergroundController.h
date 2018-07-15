@@ -11,7 +11,8 @@
 
 @interface TSWundergroundController : TSWeatherController
 
-@property (weak, nonatomic) IBOutlet UIView *currentView;
+// Strong since it is reused (and can be temporarily removed from superview).
+@property (strong, nonatomic) IBOutlet UIView *currentView;
 @property (weak, nonatomic) IBOutlet UIImageView *currentImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *moonPhaseView;
 @property (weak, nonatomic) IBOutlet UILabel *hiTempView;

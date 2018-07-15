@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface TSWeatherController : UIViewController
-@property (weak, nonatomic) IBOutlet UIView *currentView;
 
 @end

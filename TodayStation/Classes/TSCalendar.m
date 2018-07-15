@@ -13,8 +13,9 @@
 #import "TSSettings.h"
 #import "TSColors.h"
 
-const static NSUInteger dateFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
-const static NSUInteger dateTimeFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+const static NSUInteger dateFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+const static NSUInteger dateTimeFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay |
+    NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMinute | NSCalendarUnitSecond;
 
 const static CGRect itemRect = { .origin.x = 10,
                                  .origin.y = 0,
@@ -34,7 +35,7 @@ const static CGRect itemRect = { .origin.x = 10,
 {
     if (self = [super init]) {
         _gregorian = [[NSCalendar alloc]
-                      initWithCalendarIdentifier:NSGregorianCalendar];
+                      initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         _calendarView = view;
         // This probably isn't necessary, since we receive notifications.
         // However, I feel it's better to be on the safe side in case we
@@ -240,11 +241,24 @@ const static CGRect itemRect = { .origin.x = 10,
 {
     if (self.eventStore == nil) {
         self.eventStore = [[EKEventStore alloc] init];
+        [self.eventStore requestAccessToEntityType:EKEntityTypeEvent
+                                        completion:^(BOOL granted, NSError *error) {
+                                            if (granted) {
+                                                [self fetchEvents];
+                                            }
+                                        }];
     }
     // Get the events.
-    self.events = [self getEvents];    
+    [self fetchEvents];
+}
+
+- (void)fetchEvents
+{
+    self.events = [self getEvents];
     [self.delegate performSelectorOnMainThread:@selector(calendarReady) withObject:nil waitUntilDone:NO];
 }
+
+
 
 
 @end

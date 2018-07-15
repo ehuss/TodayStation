@@ -14,7 +14,7 @@
 #import "TSSettings.h"
 #import "TSColors.h"
 
-NSString *wundergroundURL = @"http://api.wunderground.com/api/0897152132573769/";
+NSString *wundergroundURL = @"https://api.wunderground.com/api/0897152132573769/";
 
 typedef enum {
     TSIconLarge,
@@ -179,9 +179,11 @@ typedef enum {
     // XXX: Current View size is all funky.
     if (controller.view) {
         TScolorize(controller.view);
+//        NSLog(@"view=%@ dayView=%@", NSStringFromCGRect(controller.view.frame), NSStringFromCGRect(controller.dayView.frame));
         return controller;
     } else {
         // XXX: fatal error.
+        NSLog(@"Failed to get forecast day controller.");
         return nil;
     }
     
@@ -192,6 +194,9 @@ typedef enum {
     TSTempUnit tempUnit = currentTempUnit();
 
     TSWundergroundForeCont *cont = [self getForecastDayCont];
+    if (cont == nil) {
+        return nil;
+    }
     NSArray *days = [self.data tsObjectForKeyPath:@"forecast.simpleforecast.forecastday" numberToString:NO];
     if (days == nil) {
         // XXX Fatal error.
@@ -286,7 +291,7 @@ typedef enum {
         NSLog(@"Unable to find temp in hourly forecast.");
         return nil;
     }
-    UILabel *tempLabel = [self createHourLabel:CGRectMake(82, 0, 57, 27)];
+    UILabel *tempLabel = [self createHourLabel:CGRectMake(82, 0, 80, 27)];
     if (tempUnit == TSTempCelsius) {
         tempLabel.text = [NSString stringWithFormat:@"%@\xc2\xb0",
                               [tempD objectForKey:@"metric"]];
@@ -307,14 +312,19 @@ typedef enum {
 {
     // XXX: Protect against no data.
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 512, 270)];
-    
+
+    // TODO: Some iOS update broke this.  Originally it was getting the height
+    // from the view loaded in the storyboard.  However, now the height
+    // is some random value (255x346).  The parent view is (1024x768).
+    // No idea what is happening, just hard-code for now.
+    CGFloat height = 90;
     // XXX assuming 4 days with first being today.
     for (int i=0; i<3; i++) {
         UIView *dayView = [self buildDayViewForDay:i+1];
         if (dayView) {
             // Move into position.
             CGRect f = dayView.frame;
-            dayView.frame = CGRectMake(f.origin.x, f.size.height*i,
+            dayView.frame = CGRectMake(f.origin.x, height*i,
                                        f.size.width, f.size.height);
             [view addSubview:dayView];
         }
@@ -390,14 +400,24 @@ typedef enum {
         // XXX Terminal error.
         NSLog(@"Failed to get current_observation.");
         NSLog(@"%@", [self.data description]);
+        return nil;
     }
 
     // Temperature.
     NSString *curTemp;
+    float t = 0;
     if (tempUnit == TSTempCelsius) {
-        curTemp = [NSString stringWithFormat:@"%@\xc2\xb0", [currentObs objectForKey:@"temp_c"]];
+        id temp = [currentObs objectForKey:@"temp_c"];
+        if (temp && temp != [NSNull null]) {
+            t = [temp floatValue];
+        }
+        curTemp = [NSString stringWithFormat:@"%.03g\xc2\xb0", t];
     } else {
-        curTemp = [NSString stringWithFormat:@"%@\xc2\xb0", [currentObs objectForKey:@"temp_f"]];        
+        id temp = [currentObs objectForKey:@"temp_f"];
+        if (temp && temp != [NSNull null]) {
+            t = [temp floatValue];
+        }
+        curTemp = [NSString stringWithFormat:@"%.03g\xc2\xb0", t];
     }
     c.currentTempView.text = curTemp;
 
@@ -406,7 +426,10 @@ typedef enum {
     if ([windDeg isKindOfClass:[NSNumber class]]) {
         int deg = [windDeg intValue];
         NSString *windDir;
-        if (deg >= 337.5 || deg <= 22.5) {
+        if (deg < 0) {
+            NSLog(@"wind_degrees are not available.");
+            windDir = @"";
+        } else if (deg >= 337.5 || deg <= 22.5) {
             windDir = @"N";
         } else if (deg > 22.5 && deg <= 67.5) {
             windDir = @"NE";
@@ -426,12 +449,18 @@ typedef enum {
             NSLog(@"wind_degrees didn't parse correctly: %i", deg);
             windDir = @"";
         }
-        
-        // XXX mph/kph
-        NSString *windMPH = [[currentObs objectForKey:@"wind_mph"] description];
-        
-        NSString *windStr = [NSString stringWithFormat:@"%@ %@mph",
-                             windDir, windMPH];
+
+        NSString *windStr;
+        if (windStr.length) {
+            // XXX mph/kph
+            NSString *windMPH = [[currentObs objectForKey:@"wind_mph"] description];
+
+            windStr = [NSString stringWithFormat:@"%@ %@mph",
+                                 windDir, windMPH];
+        } else {
+            windStr = @"";
+
+        }
         c.currentWindView.text = windStr;
     } else {
         NSLog(@"wind_degrees unexpected type: %@ %@",
@@ -591,7 +620,7 @@ typedef enum {
         return;        
     }
     NSString *escaped = [self.lastAutocomplete stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *urlStr = [NSString stringWithFormat:@"http://autocomplete.wunderground.com/aq?query=%@&format=JSON", escaped];
+    NSString *urlStr = [NSString stringWithFormat:@"https://autocomplete.wunderground.com/aq?query=%@&format=JSON", escaped];
     NSURL *url = [NSURL URLWithString:urlStr];
     NSDictionary *resultsD = [self fetchJSON:url];
     if ([self.autocompleteOp isCancelled]) {

@@ -9,7 +9,6 @@
 #import "TSWeatherController.h"
 
 @implementation TSWeatherController
-@synthesize currentView;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -48,7 +47,6 @@
 
 - (void)viewDidUnload
 {
-    [self setCurrentView:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
